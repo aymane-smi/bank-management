@@ -46,5 +46,15 @@ public class EmployeeService {
         }
     }
 
+    public void deleteEmployee(){
+        try{
+            Scanner sc = new Scanner(System.in);
+            System.out.print("id:");
+            int result = EmployeeDao.delete(sc.nextInt());
+            System.out.println(String.format("*****   NOMBRE DES ELEMENTS SUPPRIMEES EST:%d   *****", result));
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+    }
 
 }
