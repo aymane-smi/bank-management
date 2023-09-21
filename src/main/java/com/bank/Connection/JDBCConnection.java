@@ -9,7 +9,7 @@ public class JDBCConnection {
     private static String USER="aymane";
 
     private static String PASS="aymane@123";
-    private static String HOST="jdbc:postgresql://localhost:5432/SAS2";
+    private static String HOST="jdbc:postgresql://localhost:5432/BANK";
 
     private JDBCConnection(){
         try {
