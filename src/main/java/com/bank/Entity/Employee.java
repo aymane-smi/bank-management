@@ -1,13 +1,14 @@
 package com.bank.Entity;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Employee extends Person{
     private int registrationNbr;
-    private Date dateOfRecrutment;
+    private LocalDate dateOfRecrutment;
     public Employee(){}
 
-    public Employee(String firstName, String lastName, Date birthDay, String phone, String address, int registrationNbr, Date dateOfRecrutment) {
+    public Employee(String firstName, String lastName, LocalDate birthDay, String phone, String address, int registrationNbr, LocalDate dateOfRecrutment) {
         super(firstName, lastName, birthDay, phone, address);
         this.registrationNbr = registrationNbr;
         this.dateOfRecrutment = dateOfRecrutment;
@@ -21,11 +22,11 @@ public class Employee extends Person{
         this.registrationNbr = registrationNbr;
     }
 
-    public Date getDateOfRecrutment() {
+    public LocalDate getDateOfRecrutment() {
         return dateOfRecrutment;
     }
 
-    public void setDateOfRecrutment(Date dateOfRecrutment) {
+    public void setDateOfRecrutment(LocalDate dateOfRecrutment) {
         this.dateOfRecrutment = dateOfRecrutment;
     }
 }

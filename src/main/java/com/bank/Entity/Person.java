@@ -1,18 +1,19 @@
 package com.bank.Entity;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Person {
 
     private String firstName;
     private String lastName;
-    private Date birthDay;
+    private LocalDate birthDay;
     private String phone;
     private String address;
 
     public Person(){}
 
-    public Person(String firstName, String lastName, Date birthDay, String phone, String address) {
+    public Person(String firstName, String lastName, LocalDate birthDay, String phone, String address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDay = birthDay;
@@ -36,11 +37,11 @@ public class Person {
         this.lastName = lastName;
     }
 
-    public Date getBirthDay() {
+    public LocalDate getBirthDay() {
         return birthDay;
     }
 
-    public void setBirthDay(Date birthDay) {
+    public void setBirthDay(LocalDate birthDay) {
         this.birthDay = birthDay;
     }
 

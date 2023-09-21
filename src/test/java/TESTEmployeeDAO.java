@@ -3,6 +3,7 @@ import com.bank.Entity.Employee;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
 
@@ -10,7 +11,7 @@ public class TESTEmployeeDAO {
 
     @Test
     public void testCreate(){
-        Employee tmp = new Employee("test", "test", new Date(), "123456789", "address", 0, new Date());
+        Employee tmp = new Employee("test", "test", LocalDate.of(2023, 10, 11), "123456789", "address", 0, LocalDate.of(2023, 10, 11));
         Optional<Employee> tmp1 = new EmployeeDAOImpl().create(tmp);
         tmp1.ifPresent((emp)->{
             Assertions.assertNotNull(emp);

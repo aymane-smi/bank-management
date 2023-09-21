@@ -23,10 +23,10 @@ public class EmployeeDAOImpl implements EmployeeDAO{
             PreparedStatement stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, employee.getFirstName());
             stmt.setString(2, employee.getLastName());
-            stmt.setDate(3, new java.sql.Date(employee.getBirthDay().getTime()));
+            stmt.setDate(3, java.sql.Date.valueOf(employee.getBirthDay()));
             stmt.setString(4, employee.getPhone());
             stmt.setString(5, employee.getAddress());
-            stmt.setDate(6, new java.sql.Date(employee.getDateOfRecrutment().getTime()));
+            stmt.setDate(6, java.sql.Date.valueOf(employee.getDateOfRecrutment()));
             int affectedRows = stmt.executeUpdate();
             if(affectedRows == 0)
                 throw new InsertionException();
@@ -54,10 +54,10 @@ public class EmployeeDAOImpl implements EmployeeDAO{
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setString(1, employee.getFirstName());
             stmt.setString(2, employee.getLastName());
-            stmt.setDate(3, (Date) employee.getBirthDay());
+            stmt.setDate(3, java.sql.Date.valueOf(employee.getBirthDay()));
             stmt.setString(4, employee.getPhone());
             stmt.setString(5, employee.getAddress());
-            stmt.setDate(6, (Date) employee.getDateOfRecrutment());
+            stmt.setDate(6, java.sql.Date.valueOf(employee.getDateOfRecrutment()));
             int affectedRows = stmt.executeUpdate();
             if(affectedRows == 0)
                 throw new InsertionException();
