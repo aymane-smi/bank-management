@@ -2,41 +2,46 @@
 !define ENUM_CLASS [enum]
 
 class Person{
-  firstName: string
-  lastName: string
-  birthDay: Date
-  phone: string
-  address: string
+  -firstName: string
+  -lastName: string
+  -birthDay: Date
+  -phone: string
+  -address: string
 }
 
 class Client extends Person{
-  code: String
+  -code: String
 }
 
 class Employee extends Person{
-  registrationNbr: int
-  dateOfRecrutment: Date
+  -registrationNbr: int
+  -dateOfRecrutment: Date
 }
 
 class Mission {
-  code: int
-  name: string
-  description: string
+  -code: int
+  -name: string
+  -description: string
+}
+
+class MissionEmployee{
+  -startDate: Date
+  -endDate: Date
 }
 
 class Account {
-  number: int
-  balance: real
-  creationDate: Date
-  status: AccountStatus
+  -number: int
+  -balance: real
+  -creationDate: Date
+  -status: AccountStatus
 }
 
 class CurrentAccount extends Account{
-  overDraft: real
+  -overDraft: real
 }
 
 class SavingAccount extends Account{
-  tax: real
+  -tax: real
 }
 
 enum AccountStatus {
@@ -46,10 +51,10 @@ enum AccountStatus {
 }
 
 class Operation {
-  number: int
-  creationDate: Date
-  amount: real
-  type: OperationType
+  -number: int
+  -creationDate: Date
+  -amount: real
+  -type: OperationType
 }
 
 enum TypeOperation {
@@ -58,99 +63,14 @@ enum TypeOperation {
   TRANSFER
 }
 
-interface ClientDAO {
-  create(client: Client): Client
-  update(client: Client): Client
-  delete(code: String): int
-  findAll(): Client[0..*]
-  findByCode(code: String): Employee
-  findByClient(client: Client): Client[0..*]
-}
-
-interface EmployeeDAO {
-  create(employee: Employee): Employee
-  update(employe: Employee): Employee
-  delete(employe: Employe): int
-  findAll(): Employee[0..*]
-  findByRegistrationNbr(registrationNbr: int)
-  findByEmployee(employee: Employee): Employee[0..*]
-}
-
-interface MissionDAO {
-  create(mission: Mission): Mission
-  update(mission: Mission): Mission
-  delete(mission: Mission): int
-  findAll(): Mission[0..*]
-  findByCode(code: int): Employee
-  findByMission(mission: Mission): Mission[0..*]
-}
-
-interface SavingAccountDAO {
-  create(account: SavingAccount): SavingAccount
-  update(account: SavingAccount): SavingAccount
-  delete(code: String): int
-  findAll(): SavingAccount[0..*]
-  findByAccount(account: SavingAccount): SavingAccount[0..*]
-}
-
-interface CurrentAccountDAO {
-  create(account: CurrentAccountDAO): CurrentAccountDAO
-  update(account: CurrentAccountDAO): CurrentAccountDAO
-  delete(code: String): int
-  findAll(): CurrentAccountDAO[0..*]
-  findByAccount(account: CurrentAccountDAO): CurrentAccountDAO[0..*]
-}
-
-interface OperationDAO {
-  create(operation: Operation): Operation
-  update(operation: Operation): Operation
-  delete(operation: Operation): int
-  getAll(): Operation[0..*]
-  findByNbr(number: int): Operation
-  getByCompte(compte: Compte): Operation[0..*]
-}
-
-class ClientDAOImpl implements ClientDAO{
-  // Implémentation des méthodes DAO pour Client
-}
-
-class EmployeeDAOImpl implements EmployeeDAO{
-  // Implémentation des méthodes DAO pour Employe
-}
-
-class MissionDAOImpl implements MissionDAO{
-  // Implémentation des méthodes DAO pour Mission
-}
-
-class ServingAccountDAOImpl implements ServingAccountDAO{
-  // Implémentation des méthodes DAO pour Compte
-}
-
-class CurrentAccountDAOImpl implements CurrentAccountDAO{
-  // Implémentation des méthodes DAO pour Compte
-}
-
-class OperationDAOImpl implements OperationDAO{
-  // Implémentation des méthodes DAO pour Operation
-}
-
-class JDBCConnection{}
-
-JDBCConnection -- ClientDAOImpl
-JDBCConnection -- EmployeeDAOImpl
-JDBCConnection -- MissionDAOImpl
-JDBCConnection -- AccountDAOImpl
-JDBCConnection -- OperationDAOImpl
-
-ClientService -- ClientDAOImpl
-
 AccountStatus --+ Account
 TypeOperation --+ Operation
 
-Operation "*" --> "1" Employee : valider par
+Operation "*" -- "1" Employee : valider par
 Client *-- Account : Appartient
-Employee "1" --> "*" Account: créer
-Employee "1" --> "*" Mission: exercer
+Employee "1" -- "*" Account: créer
+Employee "1" -- MissionEmployee
+MissionEmployee -- "*" Mission: exercer
 Account "1" o-- "*" Operation: subir
 
 @enduml
