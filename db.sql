@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS current_account;
 DROP TABLE IF EXISTS saving_account;
 DROP TABLE IF EXISTS operation;
 DROP TABLE IF EXISTS mission_employee;
+DROP TABLE IF EXISTS account;
 
 CREATE TABLE client(
       code TEXT PRIMARY KEY,
@@ -22,7 +23,7 @@ CREATE TABLE employee(
       birthDay Date NOT NULL,
       phone TEXT NOT NULL,
       address TEXT NOT NULL,
-      dateOfRecrutment DATE NOT NULL,
+      dateOfRecrutment DATE NOT NULL
 );
 
 CREATE TABLE mission(
@@ -32,7 +33,7 @@ CREATE TABLE mission(
 );
 
 CREATE TABLE account(
-      number int PRIMARY KEY,
+      number Text PRIMARY KEY,
       balance NUMERIC(10, 4) NOT NULL,
       creationDate Date NOT NULL,
       status Text NOT NULL,
@@ -63,12 +64,12 @@ CREATE TABLE operation(
       FOREIGN KEY (employee_registrationNbr) REFERENCES employee(registrationNbr)
 );
 
-create mission_employee(
-    mission_number INT NOT NULL,
+CREATE TABLE mission_employee(
+    mission_code INT NOT NULL,
     employee_registrationNbr INT NOT NULL,
     startDate Date NOT NULL,
     endDate Date DEFAULT NULL,
-    PRIMARY KEY (mission_number, registrationNbr),
-    FOREIGN KEY (mission_number) REFERENCES mission(number),
+    PRIMARY KEY (mission_code, employee_registrationNbr),
+    FOREIGN KEY (mission_code) REFERENCES mission(code),
     FOREIGN KEY (employee_registrationNbr) REFERENCES employee(registrationNbr)
 );
