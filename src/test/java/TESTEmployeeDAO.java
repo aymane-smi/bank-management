@@ -4,8 +4,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class TESTEmployeeDAO {
 
@@ -23,5 +24,21 @@ public class TESTEmployeeDAO {
     public void testDelete(){
         int tmp = new EmployeeDAOImpl().delete(9);
         Assertions.assertEquals(0, tmp);
+    }
+
+    @Test
+    public void testFindAll(){
+        Optional<List<Employee>> tmp = new EmployeeDAOImpl().findAll();
+        tmp.ifPresent(l->{
+            Assertions.assertTrue(l.size() > 0);
+            Stream<Employee> stream = l.stream();
+            stream.forEach(emp->System.out.println(emp.getRegistrationNbr()+"/::/"+emp.getPhone()));
+        });
+    }
+
+    @Test
+    public void testFindByRegistrationNbr(){
+        Optional<Employee> tmp = new EmployeeDAOImpl().findByRegistrationNbr(11);
+        Assertions.assertTrue(tmp.isPresent());
     }
 }

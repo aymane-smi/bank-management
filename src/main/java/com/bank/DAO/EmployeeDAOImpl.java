@@ -6,6 +6,7 @@ import com.bank.Exception.DeleteException;
 import com.bank.Exception.InsertionException;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -99,11 +100,50 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 
     @Override
     public Optional<Employee> findByRegistrationNbr(int registrationNbr) {
+        try{
+            Employee emp = new Employee();
+            String query = "SELECT * FROM employee WHERE registrationnbr = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, registrationNbr);
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                emp.setRegistrationNbr(result.getInt("registrationnbr"));
+                emp.setPhone(result.getString("phone"));
+                emp.setAddress(result.getString("address"));
+                emp.setBirthDay(result.getDate("birthDay").toLocalDate());
+                emp.setFirstName(result.getString("firstName"));
+                emp.setLastName(result.getString("lastName"));
+                emp.setDateOfRecrutment(result.getDate("dateOfRecrutment").toLocalDate());
+            }
+            return Optional.of(emp);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
         return Optional.empty();
     }
 
     @Override
     public Optional<List<Employee>> findAll() {
+        try{
+            List<Employee> list = new ArrayList<>();
+            Employee emp = new Employee();
+            String query = "SELECT * FROM employee";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                emp.setRegistrationNbr(result.getInt("registrationnbr"));
+                emp.setPhone(result.getString("phone"));
+                emp.setAddress(result.getString("address"));
+                emp.setBirthDay(result.getDate("birthDay").toLocalDate());
+                emp.setFirstName(result.getString("firstName"));
+                emp.setLastName(result.getString("lastName"));
+                emp.setDateOfRecrutment(result.getDate("dateOfRecrutment").toLocalDate());
+                list.add(emp);
+            }
+            return Optional.of(list);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
         return Optional.empty();
     }
 

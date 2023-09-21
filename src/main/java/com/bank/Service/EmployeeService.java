@@ -57,4 +57,20 @@ public class EmployeeService {
         }
     }
 
+    public void findEmployee(){
+        try{
+            Scanner sc = new Scanner(System.in);
+            System.out.print("id:");
+            Optional<Employee> emp = EmployeeDao.findByRegistrationNbr(sc.nextInt());
+            if(!emp.isPresent())
+                System.out.println(String.format("*****   EMPLOYEE INEXISTANT   *****"));
+            else
+                emp.ifPresent(e->{
+                    System.out.println(String.format("*****   MATRICULE[%d] NOM[%S] PRENOM[%s] DATE_NAISSANCE[%s] TELE[%s] ADRESSE[%S] DATE_RECRUTEMENT[%S]   *****", e.getRegistrationNbr(), e.getFirstName(), e.getLastName(), e.getBirthDay().toString(), e.getPhone(), e.getAddress(), e.getDateOfRecrutment().toString()));
+                });
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+    }
+
 }
