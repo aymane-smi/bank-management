@@ -58,7 +58,9 @@ CREATE TABLE operation(
       amount NUMERIC(7, 4) NOT NULL,
       type TEXT NOT NULL,
       account_number INT NOT NULL,
-      FOREIGN KEY (account_number) REFERENCES account(number)
+      employee_registrationNbr INT NOT NULL,
+      FOREIGN KEY (account_number) REFERENCES account(number),
+      FOREIGN KEY (employee_registrationNbr) REFERENCES employee(registrationNbr)
 );
 
 create mission_employee(
