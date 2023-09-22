@@ -46,4 +46,14 @@ public class ClientService {
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
     }
+    public void deleteClient(){
+        try{
+            Scanner sc = new Scanner(System.in);
+            System.out.print("code:");
+            int result = ClientDao.delete(sc.nextLine());
+            System.out.println(String.format("*****   NOMBRE DES ELEMENTS SUPPRIMEES EST:%d   *****", result));
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+    }
 }

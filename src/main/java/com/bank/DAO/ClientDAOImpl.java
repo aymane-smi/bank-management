@@ -3,6 +3,7 @@ package com.bank.DAO;
 import com.bank.Connection.JDBCConnection;
 import com.bank.Entity.Client;
 import com.bank.Entity.Employee;
+import com.bank.Exception.DeleteException;
 import com.bank.Exception.InsertionException;
 
 import java.sql.Connection;
@@ -38,5 +39,26 @@ public class ClientDAOImpl implements ClientDAO{
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
         return Optional.empty();
+    }
+
+    @Override
+    public int delete(String code) {
+        try{
+            if(code.isEmpty())
+                throw new Exception("*****   CODE CLIENT EST VIDE   *****");
+            String query = "DELETE FROM client WHERE code = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, code);
+            int affectedRows = stmt.executeUpdate();
+            if(affectedRows == 0)
+                throw new DeleteException();
+            else{
+                return affectedRows;
+            }
+
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return 0;
     }
 }

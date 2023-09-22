@@ -18,4 +18,10 @@ public class TestClientDAO {
             Assertions.assertTrue(!emp.getCode().isEmpty());
         });
     }
+
+    @Test
+    public void testDelete(){
+        int tmp = new ClientDAOImpl().delete("code2");
+        Assertions.assertEquals(1, tmp);
+    }
 }
