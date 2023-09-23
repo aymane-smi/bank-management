@@ -55,4 +55,16 @@ public class TESTEmployeeDAO {
             });
         });
     }
+
+    @Test
+    public void testFind(){
+        Optional<Employee> tmp = new EmployeeDAOImpl().findByRegistrationNbr(13);
+        tmp.ifPresent((emp)->{
+            Optional<List<Employee>> tmp1 = new EmployeeDAOImpl().find(emp);
+            tmp1.ifPresent((listEmp)->{
+                System.out.println(listEmp.size());
+                Assertions.assertTrue(listEmp.size() > 0);
+            });
+        });
+    }
 }

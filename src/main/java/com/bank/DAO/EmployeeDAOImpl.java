@@ -144,6 +144,32 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 
     @Override
     public Optional<List<Employee>> find(Employee employee) {
+        try{
+            List<Employee> list = new ArrayList<>();
+            Employee emp = new Employee();
+            String query = "SELECT * FROM employee WHERE firstName LIKE ? AND lastName LIKE ? AND phone LIKE ? AND address LIKE ? AND birthDay = ? AND dateOfRecrutment = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, "%"+employee.getFirstName()+"%");
+            stmt.setString(2, "%"+employee.getLastName()+"%");
+            stmt.setString(3, "%"+employee.getPhone()+"%");
+            stmt.setString(4, "%"+employee.getAddress()+"%");
+            stmt.setDate(5, java.sql.Date.valueOf(employee.getBirthDay()));
+            stmt.setDate(6, java.sql.Date.valueOf(employee.getDateOfRecrutment()));
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                emp.setRegistrationNbr(result.getInt("registrationnbr"));
+                emp.setPhone(result.getString("phone"));
+                emp.setAddress(result.getString("address"));
+                emp.setBirthDay(result.getDate("birthDay").toLocalDate());
+                emp.setFirstName(result.getString("firstName"));
+                emp.setLastName(result.getString("lastName"));
+                emp.setDateOfRecrutment(result.getDate("dateOfRecrutment").toLocalDate());
+                list.add(emp);
+            }
+            return Optional.of(list);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
         return Optional.empty();
     }
 }
