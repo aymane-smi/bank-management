@@ -50,8 +50,8 @@ public class EmployeeDAOImpl implements EmployeeDAO{
     public Optional<Employee> update(Employee employee) {
         try{
             if(employee == null)
-                throw new Exception("*****   Impossible d'ajouter un employee vide   *****");
-            String query = "INSERT INTO employee(firstName, lastName, birthDay, phone, address, dateOfRecrutment) VALUES(?, ?, ?, ?, ?, ?)";
+                throw new Exception("*****   Impossible de modifier un employee vide   *****");
+            String query = "UPDATE employee SET firstName = ?, lastName = ?, birthDay = ?, phone = ?, address = ?, dateOfRecrutment = ? WHERE registrationnbr = ?";
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setString(1, employee.getFirstName());
             stmt.setString(2, employee.getLastName());
@@ -59,17 +59,12 @@ public class EmployeeDAOImpl implements EmployeeDAO{
             stmt.setString(4, employee.getPhone());
             stmt.setString(5, employee.getAddress());
             stmt.setDate(6, java.sql.Date.valueOf(employee.getDateOfRecrutment()));
+            stmt.setInt(7, employee.getRegistrationNbr());
             int affectedRows = stmt.executeUpdate();
             if(affectedRows == 0)
                 throw new InsertionException();
-            else{
-                ResultSet generatedKeys = stmt.getGeneratedKeys();
-                if (generatedKeys.next()) {
-                    int generatedId = generatedKeys.getInt(1);
-                    employee.setRegistrationNbr(generatedId);
-                }
+            else
                 return Optional.of(employee);
-            }
 
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());

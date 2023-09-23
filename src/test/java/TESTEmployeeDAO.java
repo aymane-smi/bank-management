@@ -41,4 +41,18 @@ public class TESTEmployeeDAO {
         Optional<Employee> tmp = new EmployeeDAOImpl().findByRegistrationNbr(11);
         Assertions.assertTrue(tmp.isPresent());
     }
+
+    @Test
+    public void testUpdate(){
+        Optional<Employee> tmp = new EmployeeDAOImpl().findByRegistrationNbr(11);
+        tmp.ifPresent((emp)->{
+            emp.setFirstName("test*");
+            emp.setLastName("test*");
+            Optional<Employee> tmp1 = new EmployeeDAOImpl().update(emp);
+            Assertions.assertTrue(tmp1.isPresent());
+            tmp1.ifPresent((emp1)->{
+                Assertions.assertTrue(emp1.getFirstName().equals("test*"));
+            });
+        });
+    }
 }
