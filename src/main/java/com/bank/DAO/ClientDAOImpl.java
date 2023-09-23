@@ -61,4 +61,27 @@ public class ClientDAOImpl implements ClientDAO{
         }
         return 0;
     }
+
+    @Override
+    public Optional<Client> findByCode(String code) {
+        try{
+            Client clt = new Client();
+            String query = "SELECT * FROM Client WHERE code = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, code);
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                clt.setCode(result.getString("code"));
+                clt.setPhone(result.getString("phone"));
+                clt.setAddress(result.getString("address"));
+                clt.setBirthDay(result.getDate("birthDay").toLocalDate());
+                clt.setFirstName(result.getString("firstName"));
+                clt.setLastName(result.getString("lastName"));
+            }
+            return Optional.of(clt);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
 }

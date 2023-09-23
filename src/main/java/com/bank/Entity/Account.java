@@ -2,20 +2,30 @@ package com.bank.Entity;
 
 import com.bank.Enum.AccountStatus;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Account {
     private int number;
     private double balance;
-    private Date creationDate;
+    private LocalDate creationDate;
     private AccountStatus status;
+    private Client client;
     public Account(){}
 
-    public Account(int number, double balance, Date creationDate, AccountStatus status) {
+    public Account(int number, double balance, LocalDate creationDate, AccountStatus status, Client client) {
         this.number = number;
         this.balance = balance;
         this.creationDate = creationDate;
         this.status = status;
+        this.client = client;
+    }
+
+    public Account(Account account) {
+        this.number = account.getNumber();
+        this.balance = account.getBalance();
+        this.creationDate = account.getCreationDate();
+        this.status = account.getStatus();
+        this.client = account.getClient();
     }
 
     public int getNumber() {
@@ -34,11 +44,11 @@ public class Account {
         this.balance = balance;
     }
 
-    public Date getCreationDate() {
+    public LocalDate getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -48,5 +58,13 @@ public class Account {
 
     public void setStatus(AccountStatus status) {
         this.status = status;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 }

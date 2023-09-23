@@ -5,19 +5,28 @@ import com.bank.Enum.AccountStatus;
 import java.util.Date;
 
 public class SavingAccount extends Account{
-    private double overDraft;
+    private String code;
+    private double tax;
     public SavingAccount(){}
 
-    public SavingAccount(int number, double balance, Date creationDate, AccountStatus status, double overDraft) {
-        super(number, balance, creationDate, status);
-        this.overDraft = overDraft;
+    public SavingAccount(Account account, double tax, String code) {
+        super(account);
+        this.tax = tax;
+        this.code = code;
+    }
+    public String getCode() {
+        return code;
     }
 
-    public double getOverDraft() {
-        return overDraft;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public void setOverDraft(double overDraft) {
-        this.overDraft = overDraft;
+    public double getTax() {
+        return tax;
+    }
+
+    public void setTax(double tax) {
+        this.tax = tax;
     }
 }

@@ -33,23 +33,25 @@ CREATE TABLE mission(
 );
 
 CREATE TABLE account(
-      number Text PRIMARY KEY,
+      number SERIAL PRIMARY KEY,
       balance NUMERIC(10, 4) NOT NULL,
       creationDate Date NOT NULL,
-      status Text NOT NULL,
+      status Text NOT NULL CHECK IN ("ACTIVE", "SUSPEND", "BANNED"),
       client_code TEXT NOT NULL,
       FOREIGN KEY (client_code) REFERENCES client(code)
 );
 
 CREATE TABLE current_account(
+      code Text PRIMARY KEY,
       account_number INT NOT NULL,
-      overDraft NUMERIC(6, 4) NOT NULL,
+      overDraft NUMERIC(10, 4) NOT NULL,
       FOREIGN KEY (account_number) REFERENCES account(number)
 );
 
 CREATE TABLE saving_account(
+      code Text PRIMARY KEY,
       account_number INT NOT NULL,
-      tax NUMERIC(3, 2) NOT NULL,
+      tax NUMERIC(4, 2) NOT NULL,
       FOREIGN KEY (account_number) REFERENCES account(number)
 );
 
