@@ -10,6 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class ClientDAOImpl implements ClientDAO{
@@ -79,6 +81,30 @@ public class ClientDAOImpl implements ClientDAO{
                 clt.setLastName(result.getString("lastName"));
             }
             return Optional.of(clt);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<List<Client>> findAll() {
+        try{
+            Client clt = new Client();
+            List<Client> list = new ArrayList<>();
+            String query = "SELECT * FROM Client";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                clt.setCode(result.getString("code"));
+                clt.setPhone(result.getString("phone"));
+                clt.setAddress(result.getString("address"));
+                clt.setBirthDay(result.getDate("birthDay").toLocalDate());
+                clt.setFirstName(result.getString("firstName"));
+                clt.setLastName(result.getString("lastName"));
+                list.add(clt);
+            }
+            return Optional.of(list);
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
         }

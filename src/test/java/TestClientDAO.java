@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public class TestClientDAO {
@@ -23,5 +24,10 @@ public class TestClientDAO {
     public void testDelete(){
         int tmp = new ClientDAOImpl().delete("code2");
         Assertions.assertEquals(1, tmp);
+    }
+    @Test
+    public void findAll(){
+        Optional<List<Client>> tmp = new ClientDAOImpl().findAll();
+        Assertions.assertTrue(tmp.get().size() == 3);
     }
 }

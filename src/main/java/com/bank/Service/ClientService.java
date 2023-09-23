@@ -8,6 +8,7 @@ import com.bank.Entity.Employee;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -52,6 +53,18 @@ public class ClientService {
             System.out.print("code:");
             int result = ClientDao.delete(sc.nextLine());
             System.out.println(String.format("*****   NOMBRE DES ELEMENTS SUPPRIMEES EST:%d   *****", result));
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+    }
+
+    public void findAllClients(){
+        try{
+            Optional<List<Client>> listClt= ClientDao.findAll();
+            listClt.ifPresent((list)->{
+                for(Client clt:list)
+                    System.out.println(String.format("*****   CODE[%s] NOM[%s] PRENOM[%s] DATE_NAISSANCE[%s] TELE[%s] ADRESSE[%s]   *****", clt.getCode(), clt.getFirstName(), clt.getLastName(), clt.getBirthDay().toString(), clt.getPhone(), clt.getAddress()));
+            });
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
