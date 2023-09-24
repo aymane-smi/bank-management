@@ -237,4 +237,17 @@ public class AccountService {
         else
             System.out.println("*****   COMPTE INTROUVABLE   *****");
     }
+
+    public void getAllAccount(){
+        System.out.println("*****   LISTE DES COMPTES CURRENTS   *****");
+        AccountDao.findAllCurrent().ifPresent((list)->{
+            for(CurrentAccount tmp:list)
+                System.out.println(String.format("*****   CODE[%s] BALANCE[%f] DATE_CREATION[%s] DECOUVERT[%f]  *****", tmp.getCode(), tmp.getBalance(), tmp.getCreationDate().toString(), tmp.getOverDraft()));
+        });
+        System.out.println("*****   LISTE DES COMPTES D'EMPRANGES   *****");
+        AccountDao.findAllSaving().ifPresent((list)->{
+            for(SavingAccount tmp:list)
+                System.out.println(String.format("*****   CODE[%s] BALANCE[%f] DATE_CREATION[%s] DECOUVERT[%f]  *****", tmp.getCode(), tmp.getBalance(), tmp.getCreationDate().toString(), tmp.getTax()));
+        });
+    }
 }

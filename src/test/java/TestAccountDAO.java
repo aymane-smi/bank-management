@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public class TestAccountDAO {
@@ -87,6 +88,22 @@ public class TestAccountDAO {
         Optional<Account> optionalAccount = new AccountDAOImpl().updateStatus(new AccountDAOImpl().findAccountByNbr(1).get(), AccountStatus.SUSPEND);
         optionalAccount.ifPresent((account)->{
             Assertions.assertTrue(account.getStatus() == AccountStatus.SUSPEND);
+        });
+    }
+
+    @Test
+    public void testgetCurrentAccounts(){
+        Optional<List<CurrentAccount>> listCurrent = new AccountDAOImpl().findAllCurrent();
+        listCurrent.ifPresent((list)->{
+            Assertions.assertTrue(list.size() == 0);
+        });
+    }
+
+    @Test
+    public void testgetSavingAccounts(){
+        Optional<List<SavingAccount>> listCurrent = new AccountDAOImpl().findAllSaving();
+        listCurrent.ifPresent((list)->{
+            Assertions.assertTrue(list.size() == 2);
         });
     }
 }

@@ -4,6 +4,8 @@ import com.bank.Entity.CurrentAccount;
 import com.bank.Entity.SavingAccount;
 import com.bank.Enum.AccountStatus;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface AccountDAO {
@@ -11,6 +13,8 @@ public interface AccountDAO {
     public Optional<SavingAccount> createSavingAccount(SavingAccount account);
     public Optional<CurrentAccount> createCurrentAccount(CurrentAccount account);
     public Optional<Account> findAccountByNbr(int number);
+    public Optional<List<SavingAccount>> findAllSaving();
+    public Optional<List<CurrentAccount>> findAllCurrent();
 
     public int deleteSaving(String code);
     public int deleteCurrent(String code);

@@ -75,3 +75,45 @@ CREATE TABLE mission_employee(
     FOREIGN KEY (mission_code) REFERENCES mission(code),
     FOREIGN KEY (employee_registrationNbr) REFERENCES employee(registrationNbr)
 );
+
+CREATE OR REPLACE FUNCTION getSavingAccounts() RETURNS TABLE (
+    balance NUMERIC(10, 4),
+    creationDate DATE,
+    Status TEXT,
+    code TEXT,
+    tax NUMERIC(4, 2) -- Corrected data type to match saving_account's tax column
+) AS $$
+BEGIN
+    RETURN QUERY SELECT
+        account.balance,
+        account.creationDate,
+        account.Status,
+        saving_account.code,
+        saving_account.tax
+    FROM
+        saving_account
+    JOIN
+        account ON saving_account.account_number = account.number;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION getCurrentAccounts() RETURNS TABLE (
+    balance NUMERIC(10, 4),
+    creationDate DATE,
+    Status TEXT,
+    code TEXT,
+    overDraft NUMERIC(10, 4) -- Corrected data type to match saving_account's tax column
+) AS $$
+BEGIN
+    RETURN QUERY SELECT
+        account.balance,
+        account.creationDate,
+        account.Status,
+        current_account.code,
+        current_account.overDraft
+    FROM
+        current_account
+    JOIN
+        account ON current_account.account_number = account.number;
+END;
+$$ LANGUAGE plpgsql;
