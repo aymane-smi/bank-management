@@ -12,4 +12,5 @@ public interface ClientDAO {
 
     public Optional<Client> findByCode(String code);
     public Optional<List<Client>> findAll();
+    public Optional<List<Client>> find(Client client);
 }

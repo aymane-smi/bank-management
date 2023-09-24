@@ -133,4 +133,34 @@ public class ClientDAOImpl implements ClientDAO{
         }
         return Optional.empty();
     }
+
+    @Override
+    public Optional<List<Client>> find(Client client) {
+        try{
+            List<Client> list = new ArrayList<>();
+            Client clt = new Client();
+            String query = "SELECT * FROM client WHERE firstName LIKE ? AND lastName LIKE ? AND phone LIKE ? AND address LIKE ? AND birthDay = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, "%"+client.getFirstName()+"%");
+            stmt.setString(2, "%"+client.getLastName()+"%");
+            stmt.setString(3, "%"+client.getPhone()+"%");
+            stmt.setString(4, "%"+client.getAddress()+"%");
+            stmt.setDate(5, java.sql.Date.valueOf(client.getBirthDay()));
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                System.out.println(result.getString("code"));
+                clt.setCode(result.getString("code"));
+                clt.setPhone(result.getString("phone"));
+                clt.setAddress(result.getString("address"));
+                clt.setBirthDay(result.getDate("birthDay").toLocalDate());
+                clt.setFirstName(result.getString("firstName"));
+                clt.setLastName(result.getString("lastName"));
+                list.add(clt);
+            }
+            return Optional.of(list);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
 }

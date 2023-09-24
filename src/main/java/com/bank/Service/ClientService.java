@@ -123,4 +123,45 @@ public class ClientService {
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
     }
+
+    public void findClientByAttribute(){
+        try{
+            Scanner sc = new Scanner(System.in);
+            Client clt = new Client();
+            System.out.print("nom:");
+            String tmp_str = sc.nextLine();
+            if(!tmp_str.isEmpty())
+                clt.setFirstName(tmp_str);
+            System.out.print("prenom:");
+            tmp_str = sc.nextLine();
+            if(!tmp_str.isEmpty())
+                clt.setLastName(tmp_str);
+            System.out.print("Date de naissance(aaaa-mm-jj):");
+            String tmp_date = sc.nextLine();
+            if(!tmp_date.isEmpty()){
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate inputDate = LocalDate.parse(tmp_date, formatter);
+                if(Period.between(inputDate, LocalDate.now()).getYears() >= 18)
+                    clt.setBirthDay(inputDate);
+                else
+                    throw new Exception("*****   INVALIDE DATE DE NAISSANCE POUR LE CLIENT   *****");
+            }
+            System.out.print("telephone:");
+            tmp_str = sc.nextLine();
+            if(!tmp_str.isEmpty())
+                clt.setPhone(tmp_str);
+            System.out.print("adresse:");
+            tmp_str = sc.nextLine();
+            if(!tmp_str.isEmpty())
+                clt.setAddress(tmp_str);
+            ClientDao.find(clt).ifPresent((listClt)->{
+                for(Client c:listClt){
+                    System.out.println(String.format("*****   CODE[%s] NOM[%s] PRENOM[%s] DATE_NAISSANCE[%s] TELE[%s] ADRESSE[%s]   *****", c.getCode(), c.getFirstName(), c.getLastName(), c.getBirthDay().toString(), c.getPhone(), c.getAddress()));
+                }
+            });
+            sc.close();
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+    }
 }

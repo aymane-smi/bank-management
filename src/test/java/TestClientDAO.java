@@ -43,4 +43,14 @@ public class TestClientDAO {
             });
         });
     }
+
+    @Test
+    public void testFind(){
+        Client clt = new ClientDAOImpl().findByCode("code1").get();
+        Optional<List<Client>> tmp = new ClientDAOImpl().find(clt);
+        tmp.ifPresent((client)->{
+            System.out.println("code::"+client.get(0).getCode());
+            Assertions.assertTrue(client.size() == 1);
+        });
+    }
 }
