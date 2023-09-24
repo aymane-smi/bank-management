@@ -69,4 +69,45 @@ public class ClientService {
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
     }
+
+    public void updateClient(){
+        try{
+            Scanner sc = new Scanner(System.in);
+            Client clt;
+            System.out.print("code client:");
+            clt = ClientDao.findByCode(sc.nextLine()).get();
+            System.out.print("nom:");
+            String tmp_str = sc.nextLine();
+            if(!tmp_str.isEmpty())
+                clt.setFirstName(tmp_str);
+            System.out.print("prenom:");
+            tmp_str = sc.nextLine();
+            if(!tmp_str.isEmpty())
+                clt.setLastName(tmp_str);
+            System.out.print("Date de naissance(aaaa-mm-jj):");
+            String tmp_date = sc.nextLine();
+            if(!tmp_date.isEmpty()){
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate inputDate = LocalDate.parse(tmp_date, formatter);
+                if(Period.between(inputDate, LocalDate.now()).getYears() >= 18)
+                    clt.setBirthDay(inputDate);
+                else
+                    throw new Exception("*****   INVALIDE DATE DE NAISSANCE POUR LE CLIENT   *****");
+            }
+            System.out.print("telephone:");
+            tmp_str = sc.nextLine();
+            if(!tmp_str.isEmpty())
+                clt.setPhone(tmp_str);
+            System.out.print("adresse:");
+            tmp_str = sc.nextLine();
+            if(!tmp_str.isEmpty())
+                clt.setAddress(tmp_str);
+            ClientDao.update(clt).ifPresent((listEmp)->{
+                System.out.println("*****   CLIENT MODIFIER AVEC SUCCESS   *****");
+            });
+            sc.close();
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+    }
 }

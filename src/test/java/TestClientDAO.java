@@ -26,8 +26,21 @@ public class TestClientDAO {
         Assertions.assertEquals(1, tmp);
     }
     @Test
-    public void findAll(){
+    public void testFindAll(){
         Optional<List<Client>> tmp = new ClientDAOImpl().findAll();
         Assertions.assertTrue(tmp.get().size() == 3);
+    }
+
+    @Test
+    public void testUpdate(){
+        Optional<Client> tmp = new ClientDAOImpl().findByCode("code1");
+        tmp.ifPresent((clt)->{
+            clt.setFirstName("test****");
+            clt.setLastName("test****");
+            Optional<Client> tmp1 = new ClientDAOImpl().update(clt);
+            tmp1.ifPresent((c)->{
+                Assertions.assertTrue(c.getFirstName().equals("test****"));
+            });
+        });
     }
 }

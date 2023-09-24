@@ -65,6 +65,29 @@ public class ClientDAOImpl implements ClientDAO{
     }
 
     @Override
+    public Optional<Client> update(Client client) {
+        try{
+            if(client == null)
+                throw new Exception("*****   Impossible de modifier un client vide   *****");
+            String query = "UPDATE client SET firstName = ?, lastName = ?, birthDay = ?, phone = ?, address = ? WHERE code = ?";
+            PreparedStatement stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, client.getFirstName());
+            stmt.setString(2, client.getLastName());
+            stmt.setDate(3, java.sql.Date.valueOf(client.getBirthDay()));
+            stmt.setString(4, client.getPhone());
+            stmt.setString(5, client.getAddress());
+            stmt.setString(6, client.getCode());
+            int affectedRows = stmt.executeUpdate();
+            if(affectedRows == 0)
+                throw new InsertionException();
+            return Optional.of(client);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
+
+    @Override
     public Optional<Client> findByCode(String code) {
         try{
             Client clt = new Client();
