@@ -199,4 +199,30 @@ public class AccountService {
             }
         }
     }
+    public void deleteAccount(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("numero du compte:");
+        if(AccountDao.delete(sc.nextInt()) == 1)
+            System.out.println("*****   COMPTE SUPPRIMER AVEC SUCCESS   *****");
+        else
+            System.out.println("*****   COMPTE INTROUVABLE   *****");
+    }
+
+    public void deleteSavingAccount(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("code du compte:");
+        if(AccountDao.deleteSaving(sc.nextLine()) == 1)
+            System.out.println("*****   COMPTE D'EPRANGE SUPPRIMER AVEC SUCCESS   *****");
+        else
+            System.out.println("*****   COMPTE INTROUVABLE   *****");
+    }
+
+    public void deleteCurrentAccount(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("code du compte:");
+        if(AccountDao.deleteCurrent(sc.nextLine()) == 1)
+            System.out.println("*****   COMPTE CURRENT SUPPRIMER AVEC SUCCESS   *****");
+        else
+            System.out.println("*****   COMPTE INTROUVABLE   *****");
+    }
 }

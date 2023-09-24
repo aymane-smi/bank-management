@@ -6,6 +6,7 @@ import com.bank.Entity.Client;
 import com.bank.Entity.CurrentAccount;
 import com.bank.Entity.SavingAccount;
 import com.bank.Enum.AccountStatus;
+import com.bank.Exception.DeleteException;
 import com.bank.Exception.InsertionException;
 
 import java.sql.Connection;
@@ -107,5 +108,68 @@ public class AccountDAOImpl implements AccountDAO{
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
         return Optional.empty();
+    }
+
+    @Override
+    public int deleteSaving(String code) {
+        try{
+            if(code.isEmpty())
+                throw new Exception("*****   CODE COMPTE EST VIDE   *****");
+            String query = "DELETE FROM saving_account WHERE code = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, code);
+            int affectedRows = stmt.executeUpdate();
+            if(affectedRows == 0)
+                throw new DeleteException();
+            else{
+                return affectedRows;
+            }
+
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return 0;
+    }
+
+    @Override
+    public int deleteCurrent(String code) {
+        try{
+            if(code.isEmpty())
+                throw new Exception("*****   CODE COMPTE EST VIDE   *****");
+            String query = "DELETE FROM current_account WHERE code = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, code);
+            int affectedRows = stmt.executeUpdate();
+            if(affectedRows == 0)
+                throw new DeleteException();
+            else{
+                return affectedRows;
+            }
+
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return 0;
+    }
+
+    @Override
+    public int delete(int number) {
+        try{
+            if(number == 0)
+                throw new Exception("*****   NUMERO DE COMPTE EST VIDE   *****");
+            String query = "DELETE FROM account WHERE number = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, number);
+            int affectedRows = stmt.executeUpdate();
+            if(affectedRows == 0)
+                throw new DeleteException();
+            else{
+                return affectedRows;
+            }
+
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return 0;
     }
 }

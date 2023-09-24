@@ -10,4 +10,8 @@ public interface AccountDAO {
     public Optional<SavingAccount> createSavingAccount(SavingAccount account);
     public Optional<CurrentAccount> createCurrentAccount(CurrentAccount account);
     public Optional<Account> findAccountByNbr(int number);
+
+    public int deleteSaving(String code);
+    public int deleteCurrent(String code);
+    public int delete(int number);
 }

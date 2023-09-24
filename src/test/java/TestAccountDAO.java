@@ -63,4 +63,22 @@ public class TestAccountDAO {
             });
         });
     }
+
+    @Test
+    public void testCurrentDelete(){
+        int result = new AccountDAOImpl().deleteCurrent("CURRENT1");
+        Assertions.assertTrue(result == 1);
+    }
+
+    @Test
+    public void testSavingDelete(){
+        int result = new AccountDAOImpl().deleteSaving("saving1111");
+        Assertions.assertTrue(result == 1);
+    }
+
+    @Test
+    public void testDelete(){
+        int result = new AccountDAOImpl().delete(7);
+        Assertions.assertTrue(result == 1);
+    }
 }
