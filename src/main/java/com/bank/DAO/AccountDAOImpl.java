@@ -172,4 +172,27 @@ public class AccountDAOImpl implements AccountDAO{
         }
         return 0;
     }
+
+    @Override
+    public Optional<Account> updateStatus(Account account, AccountStatus status) {
+        try{
+            if(account == null)
+                throw new Exception("*****   COMPTE EST VIDE   *****");
+            String query = "UPDATE account SET status = ? WHERE number = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, status.name());
+            stmt.setInt(2, account.getNumber());
+            int affectedRows = stmt.executeUpdate();
+            if(affectedRows == 0)
+                throw new DeleteException();
+            else{
+                account.setStatus(status);
+                return Optional.of(account);
+            }
+
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
 }

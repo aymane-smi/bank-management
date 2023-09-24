@@ -225,4 +225,16 @@ public class AccountService {
         else
             System.out.println("*****   COMPTE INTROUVABLE   *****");
     }
+
+    public void updateStatusAccount(){
+        Scanner sc = new Scanner(System.in);
+        System.out.print("code du compte:");
+        Account account = AccountDao.findAccountByNbr(sc.nextInt()).get();
+        sc.nextLine();
+        System.out.print("status(ACTIVE|SUSPEND|BANNED)");
+        if(AccountDao.updateStatus(account, AccountStatus.valueOf(sc.nextLine())).isPresent())
+            System.out.println("*****   STATUS DU COMPTE CHANGEE   *****");
+        else
+            System.out.println("*****   COMPTE INTROUVABLE   *****");
+    }
 }

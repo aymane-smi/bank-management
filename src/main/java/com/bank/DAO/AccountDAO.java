@@ -2,6 +2,7 @@ package com.bank.DAO;
 import com.bank.Entity.Account;
 import com.bank.Entity.CurrentAccount;
 import com.bank.Entity.SavingAccount;
+import com.bank.Enum.AccountStatus;
 
 import java.util.Optional;
 
@@ -14,4 +15,6 @@ public interface AccountDAO {
     public int deleteSaving(String code);
     public int deleteCurrent(String code);
     public int delete(int number);
+
+    public Optional<Account> updateStatus(Account account, AccountStatus status);
 }

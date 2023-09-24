@@ -81,4 +81,12 @@ public class TestAccountDAO {
         int result = new AccountDAOImpl().delete(7);
         Assertions.assertTrue(result == 1);
     }
+
+    @Test
+    public void testUpdateStatus(){
+        Optional<Account> optionalAccount = new AccountDAOImpl().updateStatus(new AccountDAOImpl().findAccountByNbr(1).get(), AccountStatus.SUSPEND);
+        optionalAccount.ifPresent((account)->{
+            Assertions.assertTrue(account.getStatus() == AccountStatus.SUSPEND);
+        });
+    }
 }
