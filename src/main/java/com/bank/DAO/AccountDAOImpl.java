@@ -2,8 +2,10 @@ package com.bank.DAO;
 
 import com.bank.Connection.JDBCConnection;
 import com.bank.Entity.Account;
+import com.bank.Entity.Client;
 import com.bank.Entity.CurrentAccount;
 import com.bank.Entity.SavingAccount;
+import com.bank.Enum.AccountStatus;
 import com.bank.Exception.InsertionException;
 
 import java.sql.Connection;
@@ -78,6 +80,28 @@ public class AccountDAOImpl implements AccountDAO{
             int affectedRows = stmt.executeUpdate();
             if(affectedRows == 0)
                 throw new InsertionException();
+            return Optional.of(account);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Account> findAccountByNbr(int number) {
+        try{
+            Account account = new Account();
+            String query = "SELECT * FROM Account WHERE number = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, number);
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                account.setNumber(result.getInt("number"));
+                account.setBalance(result.getDouble("balance"));
+                account.setCreationDate(result.getDate("creationDate").toLocalDate());
+                account.setStatus(AccountStatus.valueOf(result.getString("status")));
+                account.setClient(new ClientDAOImpl().findByCode(result.getString("client_code")).get());
+            }
             return Optional.of(account);
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
