@@ -70,6 +70,19 @@ public class ClientService {
         }
     }
 
+    public void findClientByCode(){
+        try{
+            Scanner sc = new Scanner(System.in);
+            System.out.println("code:");
+            Optional<Client> Clt= ClientDao.findByCode(sc.nextLine());
+            Clt.ifPresent((clt)->{
+                System.out.println(String.format("*****   CODE[%s] NOM[%s] PRENOM[%s] DATE_NAISSANCE[%s] TELE[%s] ADRESSE[%s]   *****", clt.getCode(), clt.getFirstName(), clt.getLastName(), clt.getBirthDay().toString(), clt.getPhone(), clt.getAddress()));
+            });
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+    }
+
     public void updateClient(){
         try{
             Scanner sc = new Scanner(System.in);
