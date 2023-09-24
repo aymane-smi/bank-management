@@ -50,8 +50,8 @@ public class EmployeeDAOImpl implements EmployeeDAO{
     public Optional<Employee> update(Employee employee) {
         try{
             if(employee == null)
-                throw new Exception("*****   Impossible d'ajouter un employee vide   *****");
-            String query = "INSERT INTO employee(firstName, lastName, birthDay, phone, address, dateOfRecrutment) VALUES(?, ?, ?, ?, ?, ?)";
+                throw new Exception("*****   Impossible de modifier un employee vide   *****");
+            String query = "UPDATE employee SET firstName = ?, lastName = ?, birthDay = ?, phone = ?, address = ?, dateOfRecrutment = ? WHERE registrationnbr = ?";
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setString(1, employee.getFirstName());
             stmt.setString(2, employee.getLastName());
@@ -59,17 +59,12 @@ public class EmployeeDAOImpl implements EmployeeDAO{
             stmt.setString(4, employee.getPhone());
             stmt.setString(5, employee.getAddress());
             stmt.setDate(6, java.sql.Date.valueOf(employee.getDateOfRecrutment()));
+            stmt.setInt(7, employee.getRegistrationNbr());
             int affectedRows = stmt.executeUpdate();
             if(affectedRows == 0)
                 throw new InsertionException();
-            else{
-                ResultSet generatedKeys = stmt.getGeneratedKeys();
-                if (generatedKeys.next()) {
-                    int generatedId = generatedKeys.getInt(1);
-                    employee.setRegistrationNbr(generatedId);
-                }
+            else
                 return Optional.of(employee);
-            }
 
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
@@ -149,6 +144,32 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 
     @Override
     public Optional<List<Employee>> find(Employee employee) {
+        try{
+            List<Employee> list = new ArrayList<>();
+            Employee emp = new Employee();
+            String query = "SELECT * FROM employee WHERE firstName LIKE ? AND lastName LIKE ? AND phone LIKE ? AND address LIKE ? AND birthDay = ? AND dateOfRecrutment = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, "%"+employee.getFirstName()+"%");
+            stmt.setString(2, "%"+employee.getLastName()+"%");
+            stmt.setString(3, "%"+employee.getPhone()+"%");
+            stmt.setString(4, "%"+employee.getAddress()+"%");
+            stmt.setDate(5, java.sql.Date.valueOf(employee.getBirthDay()));
+            stmt.setDate(6, java.sql.Date.valueOf(employee.getDateOfRecrutment()));
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                emp.setRegistrationNbr(result.getInt("registrationnbr"));
+                emp.setPhone(result.getString("phone"));
+                emp.setAddress(result.getString("address"));
+                emp.setBirthDay(result.getDate("birthDay").toLocalDate());
+                emp.setFirstName(result.getString("firstName"));
+                emp.setLastName(result.getString("lastName"));
+                emp.setDateOfRecrutment(result.getDate("dateOfRecrutment").toLocalDate());
+                list.add(emp);
+            }
+            return Optional.of(list);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
         return Optional.empty();
     }
 }

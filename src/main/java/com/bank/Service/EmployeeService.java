@@ -73,4 +73,100 @@ public class EmployeeService {
         }
     }
 
+    public void updateEmployee(){
+        try{
+            Scanner sc = new Scanner(System.in);
+            System.out.print("matricule:");
+            int matricule = Integer.parseInt(sc.nextLine());
+            Employee emp = EmployeeDao.findByRegistrationNbr(matricule).get();
+            //sc.nextLine();
+            System.out.print("nom:");
+            String tmp_str = sc.nextLine();
+            if(!tmp_str.isEmpty())
+                emp.setFirstName(tmp_str);
+            System.out.print("prenom:");
+            tmp_str = sc.nextLine();
+            if(!tmp_str.isEmpty())
+                emp.setLastName(tmp_str);
+            System.out.print("Date de naissance(aaaa-mm-jj):");
+            String tmp_date = sc.nextLine();
+            if(!tmp_date.isEmpty()){
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate inputDate = LocalDate.parse(tmp_date, formatter);
+                if(Period.between(inputDate, LocalDate.now()).getYears() >= 18)
+                    emp.setBirthDay(inputDate);
+                else
+                    throw new Exception("*****   INVALIDE DATE DE NAISSANCE POUR L'EMPLOYEE   *****");
+            }
+            System.out.print("telephone:");
+            tmp_str = sc.nextLine();
+            if(!tmp_str.isEmpty())
+                emp.setPhone(tmp_str);
+            System.out.print("adresse:");
+            tmp_str = sc.nextLine();
+            if(!tmp_str.isEmpty())
+                emp.setAddress(tmp_str);
+            System.out.print("date de recrutement(aaaa-mm-jj):");
+            tmp_date = sc.nextLine();
+            if(!tmp_date.isEmpty()){
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                emp.setDateOfRecrutment(LocalDate.parse(tmp_date, formatter));
+                Optional<Employee> optionalEmp = EmployeeDao.create(emp);
+                optionalEmp.ifPresent(val->System.out.println(String.format("*****   AJOUT D'UNEMPLOI AVEC ID[%d]   *****", val.getRegistrationNbr())));
+            }
+            EmployeeDao.update(emp);
+            sc.close();
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+    }
+
+    public void findEmployeeByAttribute(){
+        try{
+            Scanner sc = new Scanner(System.in);
+            Employee emp = new Employee();
+            //sc.nextLine();
+            System.out.print("nom:");
+            String tmp_str = sc.nextLine();
+            if(!tmp_str.isEmpty())
+                emp.setFirstName(tmp_str);
+            System.out.print("prenom:");
+            tmp_str = sc.nextLine();
+            if(!tmp_str.isEmpty())
+                emp.setLastName(tmp_str);
+            System.out.print("Date de naissance(aaaa-mm-jj):");
+            String tmp_date = sc.nextLine();
+            if(!tmp_date.isEmpty()){
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate inputDate = LocalDate.parse(tmp_date, formatter);
+                if(Period.between(inputDate, LocalDate.now()).getYears() >= 18)
+                    emp.setBirthDay(inputDate);
+                else
+                    throw new Exception("*****   INVALIDE DATE DE NAISSANCE POUR L'EMPLOYEE   *****");
+            }
+            System.out.print("telephone:");
+            tmp_str = sc.nextLine();
+            if(!tmp_str.isEmpty())
+                emp.setPhone(tmp_str);
+            System.out.print("adresse:");
+            tmp_str = sc.nextLine();
+            if(!tmp_str.isEmpty())
+                emp.setAddress(tmp_str);
+            System.out.print("date de recrutement(aaaa-mm-jj):");
+            tmp_date = sc.nextLine();
+            if(!tmp_date.isEmpty()){
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                emp.setDateOfRecrutment(LocalDate.parse(tmp_date, formatter));
+            }
+            EmployeeDao.find(emp).ifPresent((listEmp)->{
+                for(Employee e:listEmp){
+                    System.out.println(String.format("*****   MATRICULE[%d] NOM[%S] PRENOM[%s] DATE_NAISSANCE[%s] TELE[%s] ADRESSE[%S] DATE_RECRUTEMENT[%S]   *****", e.getRegistrationNbr(), e.getFirstName(), e.getLastName(), e.getBirthDay().toString(), e.getPhone(), e.getAddress(), e.getDateOfRecrutment().toString()));
+                }
+            });
+            sc.close();
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+    }
+
 }

@@ -10,6 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class ClientDAOImpl implements ClientDAO{
@@ -63,6 +65,29 @@ public class ClientDAOImpl implements ClientDAO{
     }
 
     @Override
+    public Optional<Client> update(Client client) {
+        try{
+            if(client == null)
+                throw new Exception("*****   Impossible de modifier un client vide   *****");
+            String query = "UPDATE client SET firstName = ?, lastName = ?, birthDay = ?, phone = ?, address = ? WHERE code = ?";
+            PreparedStatement stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, client.getFirstName());
+            stmt.setString(2, client.getLastName());
+            stmt.setDate(3, java.sql.Date.valueOf(client.getBirthDay()));
+            stmt.setString(4, client.getPhone());
+            stmt.setString(5, client.getAddress());
+            stmt.setString(6, client.getCode());
+            int affectedRows = stmt.executeUpdate();
+            if(affectedRows == 0)
+                throw new InsertionException();
+            return Optional.of(client);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
+
+    @Override
     public Optional<Client> findByCode(String code) {
         try{
             Client clt = new Client();
@@ -79,6 +104,60 @@ public class ClientDAOImpl implements ClientDAO{
                 clt.setLastName(result.getString("lastName"));
             }
             return Optional.of(clt);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<List<Client>> findAll() {
+        try{
+            Client clt = new Client();
+            List<Client> list = new ArrayList<>();
+            String query = "SELECT * FROM Client";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                clt.setCode(result.getString("code"));
+                clt.setPhone(result.getString("phone"));
+                clt.setAddress(result.getString("address"));
+                clt.setBirthDay(result.getDate("birthDay").toLocalDate());
+                clt.setFirstName(result.getString("firstName"));
+                clt.setLastName(result.getString("lastName"));
+                list.add(clt);
+            }
+            return Optional.of(list);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<List<Client>> find(Client client) {
+        try{
+            List<Client> list = new ArrayList<>();
+            Client clt = new Client();
+            String query = "SELECT * FROM client WHERE firstName LIKE ? AND lastName LIKE ? AND phone LIKE ? AND address LIKE ? AND birthDay = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, "%"+client.getFirstName()+"%");
+            stmt.setString(2, "%"+client.getLastName()+"%");
+            stmt.setString(3, "%"+client.getPhone()+"%");
+            stmt.setString(4, "%"+client.getAddress()+"%");
+            stmt.setDate(5, java.sql.Date.valueOf(client.getBirthDay()));
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                System.out.println(result.getString("code"));
+                clt.setCode(result.getString("code"));
+                clt.setPhone(result.getString("phone"));
+                clt.setAddress(result.getString("address"));
+                clt.setBirthDay(result.getDate("birthDay").toLocalDate());
+                clt.setFirstName(result.getString("firstName"));
+                clt.setLastName(result.getString("lastName"));
+                list.add(clt);
+            }
+            return Optional.of(list);
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
         }

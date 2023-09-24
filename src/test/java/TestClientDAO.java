@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public class TestClientDAO {
@@ -23,5 +24,33 @@ public class TestClientDAO {
     public void testDelete(){
         int tmp = new ClientDAOImpl().delete("code2");
         Assertions.assertEquals(1, tmp);
+    }
+    @Test
+    public void testFindAll(){
+        Optional<List<Client>> tmp = new ClientDAOImpl().findAll();
+        Assertions.assertTrue(tmp.get().size() == 3);
+    }
+
+    @Test
+    public void testUpdate(){
+        Optional<Client> tmp = new ClientDAOImpl().findByCode("code1");
+        tmp.ifPresent((clt)->{
+            clt.setFirstName("test****");
+            clt.setLastName("test****");
+            Optional<Client> tmp1 = new ClientDAOImpl().update(clt);
+            tmp1.ifPresent((c)->{
+                Assertions.assertTrue(c.getFirstName().equals("test****"));
+            });
+        });
+    }
+
+    @Test
+    public void testFind(){
+        Client clt = new ClientDAOImpl().findByCode("code1").get();
+        Optional<List<Client>> tmp = new ClientDAOImpl().find(clt);
+        tmp.ifPresent((client)->{
+            System.out.println("code::"+client.get(0).getCode());
+            Assertions.assertTrue(client.size() == 1);
+        });
     }
 }
