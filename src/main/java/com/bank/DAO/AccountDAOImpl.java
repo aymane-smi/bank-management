@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -355,6 +356,54 @@ public class AccountDAOImpl implements AccountDAO{
             String query = "SELECT * FROM getClientCurrentStatus(?)";
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setString(1, status.name());
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                account.setNumber(0);
+                account.setBalance(result.getDouble("balance"));
+                account.setCreationDate(result.getDate("creationDate").toLocalDate());
+                account.setStatus(AccountStatus.valueOf(result.getString("status")));
+                account.setClient(null);
+                list.add(new CurrentAccount(account, result.getDouble("overDraft"), result.getString("code")));
+            }
+            return Optional.of(list);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<List<SavingAccount>> findSavingByDate(LocalDate date) {
+        try{
+            Account account = new Account();
+            List<SavingAccount> list = new ArrayList<>();
+            String query = "SELECT * FROM getClientSavingByDate(?)";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setDate(1, java.sql.Date.valueOf(date));
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                account.setNumber(0);
+                account.setBalance(result.getDouble("balance"));
+                account.setCreationDate(result.getDate("creationDate").toLocalDate());
+                account.setStatus(AccountStatus.valueOf(result.getString("status")));
+                account.setClient(null);
+                list.add(new SavingAccount(account, result.getDouble("tax"), result.getString("code")));
+            }
+            return Optional.of(list);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<List<CurrentAccount>> findCurrentByDate(LocalDate date) {
+        try{
+            Account account = new Account();
+            List<CurrentAccount> list = new ArrayList<>();
+            String query = "SELECT * FROM getClientCurrentByDate(?)";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setDate(1, java.sql.Date.valueOf(date));
             ResultSet result = stmt.executeQuery();
             while(result.next()){
                 account.setNumber(0);

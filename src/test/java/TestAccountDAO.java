@@ -139,4 +139,20 @@ public class TestAccountDAO {
             Assertions.assertTrue(list.size() == 0);
         });
     }
+
+    @Test
+    public void testfindSavingByDate(){
+        Optional<List<SavingAccount>> savingAccount = new AccountDAOImpl().findSavingByDate(LocalDate.of(1999, 11, 11));
+        savingAccount.ifPresent((saving)->{
+            Assertions.assertTrue(saving.size() == 1);
+        });
+    }
+
+    @Test
+    public void testfindCurrentgByDate(){
+        Optional<List<CurrentAccount>> currentAccount = new AccountDAOImpl().findCurrentByDate(LocalDate.of(1999, 11, 11));
+        currentAccount.ifPresent((current)->{
+            Assertions.assertTrue(current.size() == 0);
+        });
+    }
 }

@@ -341,4 +341,22 @@ public class AccountService {
                 System.out.println(String.format("*****   CODE[%s] BALANCE[%f] DATE_CREATION[%s] DECOUVERT[%f]  *****", tmp.getCode(), tmp.getBalance(), tmp.getCreationDate().toString(), tmp.getTax()));
         });
     }
+
+    public void getAccountByDate(){
+        Scanner sc = new Scanner(System.in);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        System.out.println("date de creation:");
+        LocalDate date = LocalDate.parse(sc.next(), formatter);
+        System.out.println("*****   LISTE DES COMPTES CURRENTS   *****");
+        AccountDao.findCurrentByDate(date).ifPresent((list)->{
+            for(CurrentAccount tmp:list)
+                System.out.println(String.format("*****   CODE[%s] BALANCE[%f] DATE_CREATION[%s] DECOUVERT[%f]  *****", tmp.getCode(), tmp.getBalance(), tmp.getCreationDate().toString(), tmp.getOverDraft()));
+        });
+        System.out.println("*****   LISTE DES COMPTES D'EMPRANGES   *****");
+        AccountDao.findSavingByDate(date).ifPresent((list)->{
+            for(SavingAccount tmp:list)
+                System.out.println(String.format("*****   CODE[%s] BALANCE[%f] DATE_CREATION[%s] DECOUVERT[%f]  *****", tmp.getCode(), tmp.getBalance(), tmp.getCreationDate().toString(), tmp.getTax()));
+        });
+    }
+
 }

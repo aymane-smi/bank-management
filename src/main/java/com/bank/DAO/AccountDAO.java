@@ -4,6 +4,7 @@ import com.bank.Entity.CurrentAccount;
 import com.bank.Entity.SavingAccount;
 import com.bank.Enum.AccountStatus;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -27,4 +28,6 @@ public interface AccountDAO {
     public Optional<CurrentAccount> findCurrent(String code);
     public Optional<List<SavingAccount>> findSavingStatus(AccountStatus status);
     public Optional<List<CurrentAccount>> findCurrentStatus(AccountStatus status);
+    public Optional<List<SavingAccount>> findSavingByDate(LocalDate date);
+    public Optional<List<CurrentAccount>> findCurrentByDate(LocalDate date);
 }
