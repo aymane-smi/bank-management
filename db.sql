@@ -243,3 +243,22 @@ BEGIN
         account ON saving_account.account_number = account.number WHERE account.creationDate = getClientSavingByDate.account_date;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION getAccountSavingByOp(operation_nbr INT) RETURNS TABLE (
+    number INT,
+    balance NUMERIC(10, 4),
+    creationDate DATE,
+    Status TEXT
+) AS $$
+BEGIN
+    RETURN QUERY SELECT
+        account.number,
+        account.balance,
+        account.creationDate,
+        account.Status
+    FROM
+        operation
+    JOIN
+        account ON operation.account_number = account.number WHERE operation.number = getAccountSavingByOp.operation_nbr;
+END;
+$$ LANGUAGE plpgsql;

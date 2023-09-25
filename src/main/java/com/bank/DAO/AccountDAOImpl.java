@@ -1,10 +1,7 @@
 package com.bank.DAO;
 
 import com.bank.Connection.JDBCConnection;
-import com.bank.Entity.Account;
-import com.bank.Entity.Client;
-import com.bank.Entity.CurrentAccount;
-import com.bank.Entity.SavingAccount;
+import com.bank.Entity.*;
 import com.bank.Enum.AccountStatus;
 import com.bank.Exception.DeleteException;
 import com.bank.Exception.InsertionException;
@@ -414,6 +411,30 @@ public class AccountDAOImpl implements AccountDAO{
                 list.add(new CurrentAccount(account, result.getDouble("overDraft"), result.getString("code")));
             }
             return Optional.of(list);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Account> findByOperation(Operation operation) {
+        try{
+            Account account = null;
+            String query = "SELECT * FROM getAccountSavingByOp(?)";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, operation.getNumber());
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                account = new Account();
+                System.out.println("==>inside while");
+                account.setNumber(result.getInt("number"));
+                account.setBalance(result.getDouble("balance"));
+                account.setCreationDate(result.getDate("creationDate").toLocalDate());
+                account.setStatus(AccountStatus.valueOf(result.getString("status")));
+                account.setClient(null);
+            }
+            return Optional.of(account);
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
         }

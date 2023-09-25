@@ -9,6 +9,8 @@ public class Operation {
     private Date creationDate;
     private double amount;
     private OperationType type;
+    private Employee employee;
+    private Account account;
     public Operation(){}
 
     public Operation(int number, Date creationDate, double amount, OperationType type) {

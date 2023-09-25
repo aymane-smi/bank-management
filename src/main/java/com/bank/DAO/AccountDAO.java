@@ -1,6 +1,7 @@
 package com.bank.DAO;
 import com.bank.Entity.Account;
 import com.bank.Entity.CurrentAccount;
+import com.bank.Entity.Operation;
 import com.bank.Entity.SavingAccount;
 import com.bank.Enum.AccountStatus;
 
@@ -30,4 +31,5 @@ public interface AccountDAO {
     public Optional<List<CurrentAccount>> findCurrentStatus(AccountStatus status);
     public Optional<List<SavingAccount>> findSavingByDate(LocalDate date);
     public Optional<List<CurrentAccount>> findCurrentByDate(LocalDate date);
+    public Optional<Account> findByOperation(Operation operation);
 }

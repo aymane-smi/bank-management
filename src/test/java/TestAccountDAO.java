@@ -1,9 +1,6 @@
 import com.bank.DAO.AccountDAOImpl;
 import com.bank.DAO.ClientDAOImpl;
-import com.bank.Entity.Account;
-import com.bank.Entity.Client;
-import com.bank.Entity.CurrentAccount;
-import com.bank.Entity.SavingAccount;
+import com.bank.Entity.*;
 import com.bank.Enum.AccountStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -154,5 +151,14 @@ public class TestAccountDAO {
         currentAccount.ifPresent((current)->{
             Assertions.assertTrue(current.size() == 0);
         });
+    }
+    @Test
+    public void testFindByOp(){
+        Operation op = new Operation();
+        op.setNumber(0);
+        Optional<Account> optionalAcccount = new AccountDAOImpl().findByOperation(op);
+        optionalAcccount.ifPresent((account -> {
+            Assertions.assertNull(account);
+        }));
     }
 }
