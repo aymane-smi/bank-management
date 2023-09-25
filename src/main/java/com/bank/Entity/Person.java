@@ -3,13 +3,13 @@ package com.bank.Entity;
 import java.time.LocalDate;
 import java.util.Date;
 
-public class Person {
+public abstract class Person {
 
-    private String firstName;
-    private String lastName;
-    private LocalDate birthDay;
-    private String phone;
-    private String address;
+    protected String firstName;
+    protected String lastName;
+    protected LocalDate birthDay;
+    protected String phone;
+    protected String address;
 
     public Person(){}
 

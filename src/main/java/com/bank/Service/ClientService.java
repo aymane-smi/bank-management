@@ -3,7 +3,9 @@ package com.bank.Service;
 import com.bank.DAO.ClientDAOImpl;
 import com.bank.DAO.EmployeeDAOImpl;
 import com.bank.Entity.Client;
+import com.bank.Entity.CurrentAccount;
 import com.bank.Entity.Employee;
+import com.bank.Entity.SavingAccount;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -160,6 +162,27 @@ public class ClientService {
                 }
             });
             sc.close();
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+    }
+
+    public void getClientAccount(){
+        try{
+            Scanner sc = new Scanner(System.in);
+            Client clt = ClientDao.findByCode(sc.nextLine()).get();
+            ClientDao.getAccounts(clt).ifPresent((client)->{
+                System.out.println("*****   COMPTES D'EMPRANGES   *****");
+                for(Object saving:client.getAccounts().get("saving")){
+                    SavingAccount tmp = (SavingAccount) saving;
+                    System.out.println(String.format("*****   CODE[%s] BALANCE[%f] DATE_CREATION[%s] TAX[%f]  *****", tmp.getCode(), tmp.getBalance(), tmp.getCreationDate().toString(), tmp.getTax()));
+                }
+                System.out.println("*****   COMPTES CURRENTS   *****");
+                for(Object saving:client.getAccounts().get("current")){
+                    CurrentAccount tmp = (CurrentAccount) saving;
+                    System.out.println(String.format("*****   CODE[%s] BALANCE[%f] DATE_CREATION[%s] DECOUVERT[%f]  *****", tmp.getCode(), tmp.getBalance(), tmp.getCreationDate().toString(), tmp.getOverDraft()));
+                }
+            });
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
         }

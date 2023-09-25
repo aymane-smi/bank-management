@@ -1,8 +1,8 @@
 package com.bank.DAO;
 
 import com.bank.Connection.JDBCConnection;
-import com.bank.Entity.Client;
-import com.bank.Entity.Employee;
+import com.bank.Entity.*;
+import com.bank.Enum.AccountStatus;
 import com.bank.Exception.DeleteException;
 import com.bank.Exception.InsertionException;
 
@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -163,4 +164,39 @@ public class ClientDAOImpl implements ClientDAO{
         }
         return Optional.empty();
     }
+
+    @Override
+    public Optional<Client> getAccounts(Client client) {
+        try{
+            //get all saving
+            String query = "SELECT * from getClientSavingAccounts(?)";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, client.getCode());
+            ResultSet result = stmt.executeQuery();
+            HashMap<String, List> accounts = new HashMap();
+            List<SavingAccount> savings = new ArrayList<>();
+            while(result.next()){
+                Account account = new Account(0, result.getDouble("balance"), result.getDate("creationDate").toLocalDate(), AccountStatus.valueOf(result.getString("status")), null);
+                savings.add(new SavingAccount(account, result.getDouble("tax"), result.getString("code")));
+            }
+            accounts.put("saving", savings);
+            //get all current
+            query = "SELECT * from getClientCurrentAccounts(?)";
+            stmt = connection.prepareStatement(query);
+            stmt.setString(1, client.getCode());
+            result = stmt.executeQuery();
+            List<CurrentAccount> current = new ArrayList<>();
+            while(result.next()){
+                Account account = new Account(0, result.getDouble("balance"), result.getDate("creationDate").toLocalDate(), AccountStatus.valueOf(result.getString("status")), null);
+                current.add(new CurrentAccount(account, result.getDouble("overDraft"), result.getString("code")));
+            }
+            accounts.put("current", current);
+            client.setAccounts(accounts);
+            return Optional.of(client);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
+
 }

@@ -6,6 +6,6 @@ import com.bank.Service.EmployeeService;
 
 public class Main {
     public static void main(String[] args){
-        new AccountService().updateSavingAccount();
+        new ClientService().getClientAccount();
     }
 }

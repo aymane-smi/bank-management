@@ -53,4 +53,11 @@ public class TestClientDAO {
             Assertions.assertTrue(client.size() == 1);
         });
     }
+    @Test
+    public void getAccounts(){
+        Client clt = new ClientDAOImpl().findByCode("code1").get();
+        new ClientDAOImpl().getAccounts(clt).ifPresent((client)->{
+            Assertions.assertTrue(client.getAccounts().get("current").size() == 0);
+        });
+    }
 }
