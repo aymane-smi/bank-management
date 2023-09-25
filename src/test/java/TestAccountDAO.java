@@ -124,4 +124,19 @@ public class TestAccountDAO {
             Assertions.assertTrue(saving.getTax() == 10.12);
         });
     }
+
+    @Test
+    public void testStatusSaving(){
+        Optional<List<SavingAccount>> savingAccount = new AccountDAOImpl().findSavingStatus(AccountStatus.ACTIVE);
+        savingAccount.ifPresent((list)->{
+            Assertions.assertTrue(list.size() == 1);
+        });
+    }
+    @Test
+    public void testStatusCurrent(){
+        Optional<List<CurrentAccount>> currentAccount = new AccountDAOImpl().findCurrentStatus(AccountStatus.ACTIVE);
+        currentAccount.ifPresent((list)->{
+            Assertions.assertTrue(list.size() == 0);
+        });
+    }
 }

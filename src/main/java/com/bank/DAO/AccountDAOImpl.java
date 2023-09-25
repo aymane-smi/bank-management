@@ -323,4 +323,52 @@ public class AccountDAOImpl implements AccountDAO{
         return Optional.empty();
     }
 
+    @Override
+    public Optional<List<SavingAccount>> findSavingStatus(AccountStatus status) {
+        try{
+            Account account = new Account();
+            List<SavingAccount> list = new ArrayList<>();
+            String query = "SELECT * FROM getClientSavingStatus(?)";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, status.name());
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                account.setNumber(0);
+                account.setBalance(result.getDouble("balance"));
+                account.setCreationDate(result.getDate("creationDate").toLocalDate());
+                account.setStatus(AccountStatus.valueOf(result.getString("status")));
+                account.setClient(null);
+                list.add(new SavingAccount(account, result.getDouble("tax"), result.getString("code")));
+            }
+            return Optional.of(list);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<List<CurrentAccount>> findCurrentStatus(AccountStatus status) {
+        try{
+            Account account = new Account();
+            List<CurrentAccount> list = new ArrayList<>();
+            String query = "SELECT * FROM getClientCurrentStatus(?)";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, status.name());
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                account.setNumber(0);
+                account.setBalance(result.getDouble("balance"));
+                account.setCreationDate(result.getDate("creationDate").toLocalDate());
+                account.setStatus(AccountStatus.valueOf(result.getString("status")));
+                account.setClient(null);
+                list.add(new CurrentAccount(account, result.getDouble("overDraft"), result.getString("code")));
+            }
+            return Optional.of(list);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
+
 }

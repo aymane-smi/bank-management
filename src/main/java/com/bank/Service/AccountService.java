@@ -326,4 +326,19 @@ public class AccountService {
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
     }
+    public void getAccountStatus(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("status:");
+        String status = sc.nextLine();
+        System.out.println("*****   LISTE DES COMPTES CURRENTS   *****");
+        AccountDao.findCurrentStatus(AccountStatus.valueOf(status)).ifPresent((list)->{
+            for(CurrentAccount tmp:list)
+                System.out.println(String.format("*****   CODE[%s] BALANCE[%f] DATE_CREATION[%s] DECOUVERT[%f]  *****", tmp.getCode(), tmp.getBalance(), tmp.getCreationDate().toString(), tmp.getOverDraft()));
+        });
+        System.out.println("*****   LISTE DES COMPTES D'EMPRANGES   *****");
+        AccountDao.findSavingStatus(AccountStatus.valueOf(status)).ifPresent((list)->{
+            for(SavingAccount tmp:list)
+                System.out.println(String.format("*****   CODE[%s] BALANCE[%f] DATE_CREATION[%s] DECOUVERT[%f]  *****", tmp.getCode(), tmp.getBalance(), tmp.getCreationDate().toString(), tmp.getTax()));
+        });
+    }
 }

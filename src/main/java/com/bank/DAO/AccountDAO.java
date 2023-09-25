@@ -25,4 +25,6 @@ public interface AccountDAO {
     public Optional<Account> update(Account account);
     public Optional<SavingAccount> findSaving(String code);
     public Optional<CurrentAccount> findCurrent(String code);
+    public Optional<List<SavingAccount>> findSavingStatus(AccountStatus status);
+    public Optional<List<CurrentAccount>> findCurrentStatus(AccountStatus status);
 }
