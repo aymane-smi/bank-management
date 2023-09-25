@@ -106,4 +106,22 @@ public class TestAccountDAO {
             Assertions.assertTrue(list.size() == 2);
         });
     }
+
+    @Test
+    public void testUpdateAccount(){
+        Account test = new AccountDAOImpl().findAccountByNbr(5).get();
+        test.setCreationDate(LocalDate.of(1999,11,11));
+        Optional<Account> optionalAccount = new AccountDAOImpl().update(test);
+        optionalAccount.ifPresent((val)->{
+            Assertions.assertTrue(val.getCreationDate().isEqual(LocalDate.of(1999,11,11)));
+        });
+    }
+
+    @Test
+    public void testFindOneSaving(){
+        Optional<SavingAccount> savingAccount = new AccountDAOImpl().findSaving("SAVING1");
+        savingAccount.ifPresent((saving)->{
+            Assertions.assertTrue(saving.getTax() == 10.12);
+        });
+    }
 }

@@ -21,4 +21,8 @@ public interface AccountDAO {
     public int delete(int number);
 
     public Optional<Account> updateStatus(Account account, AccountStatus status);
+
+    public Optional<Account> update(Account account);
+    public Optional<SavingAccount> findSaving(String code);
+    public Optional<CurrentAccount> findCurrent(String code);
 }

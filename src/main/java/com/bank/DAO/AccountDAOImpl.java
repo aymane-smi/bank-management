@@ -244,4 +244,83 @@ public class AccountDAOImpl implements AccountDAO{
         }
         return Optional.empty();
     }
+
+    @Override
+    public Optional<Account> update(Account account) {
+        try{
+            if(account == null)
+                throw new Exception("*****   Impossible de modifier un compte vide   *****");
+            String query = "UPDATE account SET balance = ?, creationDate = ?, status = ?, client_code = ? WHERE number = ?";
+            PreparedStatement stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            stmt.setDouble(1, account.getBalance());
+            stmt.setDate(2, java.sql.Date.valueOf(account.getCreationDate()));
+            stmt.setString(3, account.getStatus().name());
+            stmt.setString(4, account.getClient().getCode());
+            stmt.setInt(5, account.getNumber());
+            int affectedRows = stmt.executeUpdate();
+            if(affectedRows == 0)
+                throw new InsertionException();
+            if(account instanceof SavingAccount){
+                query = "UPDATE saving_account SET tax = ?, account_number = ? WHERE code = ?";
+                stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                stmt.setDouble(1, ((SavingAccount) account).getTax());
+                stmt.setInt(2, account.getNumber());
+                stmt.setString(3, ((SavingAccount) account).getCode());
+                affectedRows = stmt.executeUpdate();
+                if(affectedRows == 0)
+                    throw new InsertionException();
+            }
+            else if(account instanceof CurrentAccount){
+                query = "UPDATE saving_account SET overDraft = ?, account_number = ? WHERE code = ?";
+                stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                stmt.setDouble(1, ((CurrentAccount) account).getOverDraft());
+                stmt.setInt(2, account.getNumber());
+                stmt.setString(3, ((CurrentAccount) account).getCode());
+                affectedRows = stmt.executeUpdate();
+                if(affectedRows == 0)
+                    throw new InsertionException();
+            }
+            return Optional.of(account);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<SavingAccount> findSaving(String code) {
+        try{
+            SavingAccount account = new SavingAccount();
+            String query = "SELECT * FROM saving_account WHERE code = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, code);
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                account = new SavingAccount(this.findAccountByNbr(result.getInt("account_number")).get(), result.getDouble("tax"), result.getString("code"));
+            }
+            return Optional.of(account);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<CurrentAccount> findCurrent(String code) {
+        try{
+            CurrentAccount account = new CurrentAccount();
+            String query = "SELECT * FROM current_account WHERE code = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, code);
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                account = new CurrentAccount(this.findAccountByNbr(result.getInt("account_number")).get(), result.getDouble("overDraft"), result.getString("code"));
+            }
+            return Optional.of(account);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
+
 }
