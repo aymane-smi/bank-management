@@ -75,3 +75,190 @@ CREATE TABLE mission_employee(
     FOREIGN KEY (mission_code) REFERENCES mission(code),
     FOREIGN KEY (employee_registrationNbr) REFERENCES employee(registrationNbr)
 );
+
+CREATE OR REPLACE FUNCTION getSavingAccounts() RETURNS TABLE (
+    balance NUMERIC(10, 4),
+    creationDate DATE,
+    Status TEXT,
+    code TEXT,
+    tax NUMERIC(4, 2) -- Corrected data type to match saving_account's tax column
+) AS $$
+BEGIN
+    RETURN QUERY SELECT
+        account.balance,
+        account.creationDate,
+        account.Status,
+        saving_account.code,
+        saving_account.tax
+    FROM
+        saving_account
+    JOIN
+        account ON saving_account.account_number = account.number;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION getCurrentAccounts() RETURNS TABLE (
+    balance NUMERIC(10, 4),
+    creationDate DATE,
+    Status TEXT,
+    code TEXT,
+    overDraft NUMERIC(10, 4) -- Corrected data type to match saving_account's tax column
+) AS $$
+BEGIN
+    RETURN QUERY SELECT
+        account.balance,
+        account.creationDate,
+        account.Status,
+        current_account.code,
+        current_account.overDraft
+    FROM
+        current_account
+    JOIN
+        account ON current_account.account_number = account.number;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION getClientSavingAccounts(client_code TEXT) RETURNS TABLE (
+    balance NUMERIC(10, 4),
+    creationDate DATE,
+    Status TEXT,
+    code TEXT,
+    tax NUMERIC(4, 2) -- Corrected data type to match saving_account's tax column
+) AS $$
+BEGIN
+    RETURN QUERY SELECT
+        account.balance,
+        account.creationDate,
+        account.Status,
+        saving_account.code,
+        saving_account.tax
+    FROM
+        saving_account
+    JOIN
+        account ON saving_account.account_number = account.number WHERE account.client_code = getClientSavingAccounts.client_code;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION getClientCurrentStatus(status TEXT) RETURNS TABLE (
+    balance NUMERIC(10, 4),
+    creationDate DATE,
+    Status TEXT,
+    code TEXT,
+    overDraft NUMERIC(10, 4) -- Corrected data type to match saving_account's tax column
+) AS $$
+BEGIN
+    RETURN QUERY SELECT
+        account.balance,
+        account.creationDate,
+        account.Status,
+        current_account.code,
+        current_account.overDraft
+    FROM
+        current_account
+    JOIN
+        account ON current_account.account_number = account.number WHERE account.status = getClientCurrentStatus.status;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION getClientSavingStatus(account_status TEXT) RETURNS TABLE (
+    balance NUMERIC(10, 4),
+    creationDate DATE,
+    Status TEXT,
+    code TEXT,
+    tax NUMERIC(4, 2) -- Corrected data type to match saving_account's tax column
+) AS $$
+BEGIN
+    RETURN QUERY SELECT
+        account.balance,
+        account.creationDate,
+        account.Status,
+        saving_account.code,
+        saving_account.tax
+    FROM
+        saving_account
+    JOIN
+        account ON saving_account.account_number = account.number WHERE account.status = getClientSavingStatus.account_status;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION getClientCurrentStatus(account_status TEXT) RETURNS TABLE (
+    balance NUMERIC(10, 4),
+    creationDate DATE,
+    Status TEXT,
+    code TEXT,
+    overDraft NUMERIC(10, 4) -- Corrected data type to match saving_account's tax column
+) AS $$
+BEGIN
+    RETURN QUERY SELECT
+        account.balance,
+        account.creationDate,
+        account.Status,
+        current_account.code,
+        current_account.overDraft
+    FROM
+        current_account
+    JOIN
+        account ON current_account.account_number = account.number WHERE account.status = getClientCurrentStatus.account_status;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION getClientCurrentByDate(account_date DATE) RETURNS TABLE (
+    balance NUMERIC(10, 4),
+    creationDate DATE,
+    Status TEXT,
+    code TEXT,
+    overDraft NUMERIC(10, 4) -- Corrected data type to match saving_account's tax column
+) AS $$
+BEGIN
+    RETURN QUERY SELECT
+        account.balance,
+        account.creationDate,
+        account.Status,
+        current_account.code,
+        current_account.overDraft
+    FROM
+        current_account
+    JOIN
+        account ON current_account.account_number = account.number WHERE account.creationDate = getClientCurrentByDate.account_date;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION getClientSavingByDate(account_date DATE) RETURNS TABLE (
+    balance NUMERIC(10, 4),
+    creationDate DATE,
+    Status TEXT,
+    code TEXT,
+    tax NUMERIC(10, 4) -- Corrected data type to match saving_account's tax column
+) AS $$
+BEGIN
+    RETURN QUERY SELECT
+        account.balance,
+        account.creationDate,
+        account.Status,
+        saving_account.code,
+        saving_account.tax
+    FROM
+        saving_account
+    JOIN
+        account ON saving_account.account_number = account.number WHERE account.creationDate = getClientSavingByDate.account_date;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION getAccountSavingByOp(operation_nbr INT) RETURNS TABLE (
+    number INT,
+    balance NUMERIC(10, 4),
+    creationDate DATE,
+    Status TEXT
+) AS $$
+BEGIN
+    RETURN QUERY SELECT
+        account.number,
+        account.balance,
+        account.creationDate,
+        account.Status
+    FROM
+        operation
+    JOIN
+        account ON operation.account_number = account.number WHERE operation.number = getAccountSavingByOp.operation_nbr;
+END;
+$$ LANGUAGE plpgsql;

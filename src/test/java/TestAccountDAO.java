@@ -1,14 +1,12 @@
 import com.bank.DAO.AccountDAOImpl;
 import com.bank.DAO.ClientDAOImpl;
-import com.bank.Entity.Account;
-import com.bank.Entity.Client;
-import com.bank.Entity.CurrentAccount;
-import com.bank.Entity.SavingAccount;
+import com.bank.Entity.*;
 import com.bank.Enum.AccountStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public class TestAccountDAO {
@@ -62,5 +60,105 @@ public class TestAccountDAO {
                 });
             });
         });
+    }
+
+    @Test
+    public void testCurrentDelete(){
+        int result = new AccountDAOImpl().deleteCurrent("CURRENT1");
+        Assertions.assertTrue(result == 1);
+    }
+
+    @Test
+    public void testSavingDelete(){
+        int result = new AccountDAOImpl().deleteSaving("saving1111");
+        Assertions.assertTrue(result == 1);
+    }
+
+    @Test
+    public void testDelete(){
+        int result = new AccountDAOImpl().delete(7);
+        Assertions.assertTrue(result == 1);
+    }
+
+    @Test
+    public void testUpdateStatus(){
+        Optional<Account> optionalAccount = new AccountDAOImpl().updateStatus(new AccountDAOImpl().findAccountByNbr(1).get(), AccountStatus.SUSPEND);
+        optionalAccount.ifPresent((account)->{
+            Assertions.assertTrue(account.getStatus() == AccountStatus.SUSPEND);
+        });
+    }
+
+    @Test
+    public void testgetCurrentAccounts(){
+        Optional<List<CurrentAccount>> listCurrent = new AccountDAOImpl().findAllCurrent();
+        listCurrent.ifPresent((list)->{
+            Assertions.assertTrue(list.size() == 0);
+        });
+    }
+
+    @Test
+    public void testgetSavingAccounts(){
+        Optional<List<SavingAccount>> listCurrent = new AccountDAOImpl().findAllSaving();
+        listCurrent.ifPresent((list)->{
+            Assertions.assertTrue(list.size() == 2);
+        });
+    }
+
+    @Test
+    public void testUpdateAccount(){
+        Account test = new AccountDAOImpl().findAccountByNbr(5).get();
+        test.setCreationDate(LocalDate.of(1999,11,11));
+        Optional<Account> optionalAccount = new AccountDAOImpl().update(test);
+        optionalAccount.ifPresent((val)->{
+            Assertions.assertTrue(val.getCreationDate().isEqual(LocalDate.of(1999,11,11)));
+        });
+    }
+
+    @Test
+    public void testFindOneSaving(){
+        Optional<SavingAccount> savingAccount = new AccountDAOImpl().findSaving("SAVING1");
+        savingAccount.ifPresent((saving)->{
+            Assertions.assertTrue(saving.getTax() == 10.12);
+        });
+    }
+
+    @Test
+    public void testStatusSaving(){
+        Optional<List<SavingAccount>> savingAccount = new AccountDAOImpl().findSavingStatus(AccountStatus.ACTIVE);
+        savingAccount.ifPresent((list)->{
+            Assertions.assertTrue(list.size() == 1);
+        });
+    }
+    @Test
+    public void testStatusCurrent(){
+        Optional<List<CurrentAccount>> currentAccount = new AccountDAOImpl().findCurrentStatus(AccountStatus.ACTIVE);
+        currentAccount.ifPresent((list)->{
+            Assertions.assertTrue(list.size() == 0);
+        });
+    }
+
+    @Test
+    public void testfindSavingByDate(){
+        Optional<List<SavingAccount>> savingAccount = new AccountDAOImpl().findSavingByDate(LocalDate.of(1999, 11, 11));
+        savingAccount.ifPresent((saving)->{
+            Assertions.assertTrue(saving.size() == 1);
+        });
+    }
+
+    @Test
+    public void testfindCurrentgByDate(){
+        Optional<List<CurrentAccount>> currentAccount = new AccountDAOImpl().findCurrentByDate(LocalDate.of(1999, 11, 11));
+        currentAccount.ifPresent((current)->{
+            Assertions.assertTrue(current.size() == 0);
+        });
+    }
+    @Test
+    public void testFindByOp(){
+        Operation op = new Operation();
+        op.setNumber(0);
+        Optional<Account> optionalAcccount = new AccountDAOImpl().findByOperation(op);
+        optionalAcccount.ifPresent((account -> {
+            Assertions.assertNull(account);
+        }));
     }
 }
