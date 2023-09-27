@@ -24,4 +24,11 @@ public class TestOperationDAO {
             Assertions.assertEquals(2, operation.getNumber());
         });
     }
+    @Test
+    public void testDelete(){
+        Operation operation = new Operation();
+        operation.setNumber(4);
+        int op = new OperationDAOImpl().delete(operation);
+        Assertions.assertEquals(1, op);
+    }
 }

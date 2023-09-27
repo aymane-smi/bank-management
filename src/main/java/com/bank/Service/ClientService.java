@@ -42,6 +42,9 @@ public class ClientService {
             clt.setPhone(sc.nextLine());
             System.out.print("adresse:");
             clt.setAddress(sc.nextLine());
+            System.out.print("employee code:");
+            String str = sc.nextLine();
+            clt.setEmployee(new EmployeeDAOImpl().findByRegistrationNbr(Integer.parseInt(str)).get());
             Optional<Client> optionalClt = ClientDao.create(clt);
             optionalClt.ifPresent(val->System.out.println(String.format("*****   AJOUT D'UN CLIENT AVEC CODE[%s]   *****", val.getCode())));
             sc.close();
@@ -65,7 +68,7 @@ public class ClientService {
             Optional<List<Client>> listClt= ClientDao.findAll();
             listClt.ifPresent((list)->{
                 for(Client clt:list)
-                    System.out.println(String.format("*****   CODE[%s] NOM[%s] PRENOM[%s] DATE_NAISSANCE[%s] TELE[%s] ADRESSE[%s]   *****", clt.getCode(), clt.getFirstName(), clt.getLastName(), clt.getBirthDay().toString(), clt.getPhone(), clt.getAddress()));
+                    System.out.println(String.format("*****   CODE[%s] NOM[%s] PRENOM[%s] DATE_NAISSANCE[%s] TELE[%s] ADRESSE[%s]  EMPLOYEE_REGISTRATION[%d]   *****", clt.getCode(), clt.getFirstName(), clt.getLastName(), clt.getBirthDay().toString(), clt.getPhone(), clt.getAddress(), clt.getEmployee().getRegistrationNbr()));
             });
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
@@ -78,7 +81,7 @@ public class ClientService {
             System.out.println("code:");
             Optional<Client> Clt= ClientDao.findByCode(sc.nextLine());
             Clt.ifPresent((clt)->{
-                System.out.println(String.format("*****   CODE[%s] NOM[%s] PRENOM[%s] DATE_NAISSANCE[%s] TELE[%s] ADRESSE[%s]   *****", clt.getCode(), clt.getFirstName(), clt.getLastName(), clt.getBirthDay().toString(), clt.getPhone(), clt.getAddress()));
+                System.out.println(String.format("*****   CODE[%s] NOM[%s] PRENOM[%s] DATE_NAISSANCE[%s] TELE[%s] ADRESSE[%s] EMPLOYEE_REGISTRATION[%d]   *****", clt.getCode(), clt.getFirstName(), clt.getLastName(), clt.getBirthDay().toString(), clt.getPhone(), clt.getAddress(), clt.getEmployee().getRegistrationNbr()));
             });
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
@@ -158,7 +161,7 @@ public class ClientService {
                 clt.setAddress(tmp_str);
             ClientDao.find(clt).ifPresent((listClt)->{
                 for(Client c:listClt){
-                    System.out.println(String.format("*****   CODE[%s] NOM[%s] PRENOM[%s] DATE_NAISSANCE[%s] TELE[%s] ADRESSE[%s]   *****", c.getCode(), c.getFirstName(), c.getLastName(), c.getBirthDay().toString(), c.getPhone(), c.getAddress()));
+                    System.out.println(String.format("*****   CODE[%s] NOM[%s] PRENOM[%s] DATE_NAISSANCE[%s] TELE[%s] ADRESSE[%s] EMPLOYEE_REGISTRATION[%d]   *****", c.getCode(), c.getFirstName(), c.getLastName(), c.getBirthDay().toString(), c.getPhone(), c.getAddress(), clt.getEmployee().getRegistrationNbr()));
                 }
             });
             sc.close();

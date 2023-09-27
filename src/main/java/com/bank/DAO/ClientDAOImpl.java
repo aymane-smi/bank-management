@@ -26,7 +26,7 @@ public class ClientDAOImpl implements ClientDAO{
         try{
             if(client == null)
                 throw new Exception("*****   Impossible d'ajouter un client vide   *****");
-            String query = "INSERT INTO client(code, firstName, lastName, birthDay, phone, address) VALUES(?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO client(code, firstName, lastName, birthDay, phone, address, employee_registrationNbr) VALUES(?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, client.getCode());
             stmt.setString(2, client.getFirstName());
@@ -34,6 +34,7 @@ public class ClientDAOImpl implements ClientDAO{
             stmt.setDate(4, java.sql.Date.valueOf(client.getBirthDay()));
             stmt.setString(5, client.getPhone());
             stmt.setString(6, client.getAddress());
+            stmt.setInt(7, client.getEmployee().getRegistrationNbr());
             int affectedRows = stmt.executeUpdate();
             if(affectedRows == 0)
                 throw new InsertionException();
@@ -103,6 +104,7 @@ public class ClientDAOImpl implements ClientDAO{
                 clt.setBirthDay(result.getDate("birthDay").toLocalDate());
                 clt.setFirstName(result.getString("firstName"));
                 clt.setLastName(result.getString("lastName"));
+                clt.setEmployee(new EmployeeDAOImpl().findByRegistrationNbr(result.getInt("employee_registrationNbr")).get());
             }
             return Optional.of(clt);
         }catch(Exception e){
@@ -126,6 +128,7 @@ public class ClientDAOImpl implements ClientDAO{
                 clt.setBirthDay(result.getDate("birthDay").toLocalDate());
                 clt.setFirstName(result.getString("firstName"));
                 clt.setLastName(result.getString("lastName"));
+                clt.setEmployee(new EmployeeDAOImpl().findByRegistrationNbr(result.getInt("employee_registrationNbr")).get());
                 list.add(clt);
             }
             return Optional.of(list);
@@ -156,6 +159,7 @@ public class ClientDAOImpl implements ClientDAO{
                 clt.setBirthDay(result.getDate("birthDay").toLocalDate());
                 clt.setFirstName(result.getString("firstName"));
                 clt.setLastName(result.getString("lastName"));
+                clt.setEmployee(new EmployeeDAOImpl().findByRegistrationNbr(result.getInt("employee_registrationNbr")).get());
                 list.add(clt);
             }
             return Optional.of(list);

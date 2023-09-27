@@ -61,4 +61,35 @@ public class OperationService {
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
     }
+
+    public void deleteOperation(){
+        Scanner sc =  new Scanner(System.in);
+        System.out.print("number d'operation:");
+        Operation op = new Operation();
+        op.setNumber(sc.nextInt());
+        op = OperationDao.findByNumber(op).get();
+        if(op.getType() == OperationType.PAYMENT){
+            Account acc = new AccountDAOImpl().findAccountByNbr(op.getAccount().getNumber()).get();
+            acc.setBalance(acc.getBalance() - op.getAmount());
+            new AccountDAOImpl().update(acc);
+            if(OperationDao.delete(op) == 1)
+                System.out.println("*****   OPERATION SUPPRIMER AVEC SUCCESS   *****");
+        }else if(op.getType() == OperationType.WITHDRAWAL){
+            Account acc = new AccountDAOImpl().findAccountByNbr(op.getAccount().getNumber()).get();
+            acc.setBalance(acc.getBalance() + op.getAmount());
+            new AccountDAOImpl().update(acc);
+            if(OperationDao.delete(op) == 1)
+                System.out.println("*****   OPERATION SUPPRIMER AVEC SUCCESS   *****");
+        }
+    }
+    public void findOperation(){
+        Scanner sc =  new Scanner(System.in);
+        System.out.print("number d'operation:");
+        int number = sc.nextInt();
+        sc.nextLine();
+        Operation op = new Operation();
+        op.setNumber(number);
+        op = OperationDao.findByNumber(op).get();
+        System.out.print(String.format("*****   OPERATION_NUMBER[%d] MONTANT[%f] TYPE[%s] NOMBRE_COMPTE[%d] EMPLOYEE_REGISTRATION[%d]", op.getNumber(), op.getAmount(), op.getType().name(), op.getAccount().getNumber(), op.getEmployee().getRegistrationNbr()));
+    }
 }

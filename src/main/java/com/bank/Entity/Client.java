@@ -9,6 +9,7 @@ public class Client extends Person{
     public Map<String, List> getAccounts() {
         return accounts;
     }
+    public Employee employee;
 
     public void setAccounts(Map<String, List> accounts) {
         this.accounts = accounts;
@@ -27,5 +28,13 @@ public class Client extends Person{
     }
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 }

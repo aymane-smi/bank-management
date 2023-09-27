@@ -13,7 +13,9 @@ CREATE TABLE client(
       lastName TEXT NOT NULL,
       birthDay Date NOT NULL,
       phone TEXT NOT NULL,
-      address TEXT NOT NULL
+      address TEXT NOT NULL,
+      employee_registrationNbr INT,
+      FOREIGN KEY(employee_registrationNbr) REFERENCES employee(registrationNbr)
 );
 
 CREATE TABLE employee(
