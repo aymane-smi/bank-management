@@ -26,4 +26,8 @@ public class MissionVUE {
         missionService.deleteMission(sc.nextInt());
         sc.close();
     }
+
+    public void findAllMission(){
+        missionService.findAllMission();
+    }
 }

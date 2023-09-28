@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class MissionDAOImpl implements MissionDAO{
@@ -60,5 +62,26 @@ public class MissionDAOImpl implements MissionDAO{
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
         return 0;
+    }
+
+    @Override
+    public Optional<List<Mission>> findAll(){
+        try{
+            List<Mission> list = new ArrayList<>();
+            Mission mission = new Mission();
+            String query = "SELECT * FROM mission";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                mission.setCode(result.getInt("code"));
+                mission.setName(result.getString("name"));
+                mission.setDescription(result.getString("description"));
+                list.add(mission);
+            }
+            return Optional.of(list);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
     }
 }

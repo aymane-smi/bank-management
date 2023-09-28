@@ -3,7 +3,9 @@ package com.bank.Service;
 import com.bank.DAO.MissionDAOImpl;
 import com.bank.Entity.Mission;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class MissionService {
     private MissionDAOImpl MissionDao;
@@ -40,5 +42,17 @@ public class MissionService {
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
+    }
+
+    public void findAllMission(){
+        Optional<List<Mission>> optionalMissionList = new MissionDAOImpl().findAll();
+        if(!optionalMissionList.isPresent())
+            System.out.println("*****   ACUNNES MISSION N'EXISTES   *****");
+        optionalMissionList.ifPresent((list)->{
+            Stream<Mission> stream = list.stream();
+            stream.forEach(mission->{
+                System.out.println(String.format("*****   CODE[%d] NOM[%s] DESCRIPTION[%s]   *****", mission.getCode(), mission.getName(), mission.getDescription()));
+            });
+        });
     }
 }
