@@ -36,5 +36,13 @@ public class AssertionVUE {
         inputDate = LocalDate.parse(tmp_date, formatter);
         tmp.setEndDate(inputDate);
         assertionService.createAssertion(tmp);
+        sc.close();
+    }
+
+    public void deleteAssertion(){
+        Scanner sc = new Scanner(System.in);
+        System.out.print("code:");
+        assertionService.deleteAssertion(sc.nextInt());
+        sc.close();
     }
 }

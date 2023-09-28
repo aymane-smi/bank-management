@@ -24,4 +24,18 @@ public class AssertionService {
 
         }
     }
+
+    public void deleteAssertion(int id){
+        try{
+            if(id == 0)
+                throw new Exception("*****   LA ASSERTION NE PEUT PAS ETRE VIDE   *****");
+            int result = AssertionDao.delete(id);
+            if(result == 1)
+                System.out.println("*****   ASSERTION SUPPRIMER AVEC SUCCESS   *****");
+            else
+                System.out.println("*****   IMPOSSIBLE DE SUPPRIMER LA ASSERTION   *****");
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+    }
 }

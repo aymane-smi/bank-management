@@ -21,4 +21,10 @@ public class TestAssertion {
             Assertions.assertEquals(1, obj.getId());
         });
     }
+
+    @Test
+    public void testDelete(){
+        int result = new AssertionDAOImpl().delete(1);
+        Assertions.assertEquals(1, result);
+    }
 }

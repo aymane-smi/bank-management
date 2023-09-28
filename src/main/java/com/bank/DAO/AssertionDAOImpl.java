@@ -43,4 +43,22 @@ public class AssertionDAOImpl implements AssertionDAO {
         }
         return Optional.empty();
     }
+
+    @Override
+    public int delete(int code){
+        try{
+            if(code == 0)
+                throw new Exception("*****   IL N'EXISTE AUCUNNE ASSERTION AVEC CODE 0   *****");
+            String query = "DELETE FROM mission_employee WHERE id = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, code);
+            int affectedRows = stmt.executeUpdate();
+            if(affectedRows == 0)
+                throw new InsertionException();
+            return affectedRows;
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return 0;
+    }
 }
