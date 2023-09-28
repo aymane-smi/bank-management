@@ -84,4 +84,25 @@ public class MissionDAOImpl implements MissionDAO{
         }
         return Optional.empty();
     }
+    @Override
+    public Optional<Mission> findByCode(int code){
+        try{
+            Mission mission = new Mission();
+            if(code == 0)
+                throw new Exception("***** IL N'EXISTE ACUNNE MISSION AVEC UN CODE EGALE A 0   *****");
+            String query = "SELECT * FROM mission WHERE CODE = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, code);
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                mission.setCode(result.getInt("code"));
+                mission.setName(result.getString("name"));
+                mission.setDescription(result.getString("description"));
+            }
+            return Optional.of(mission);
+        }catch (Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
 }

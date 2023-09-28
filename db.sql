@@ -69,11 +69,11 @@ CREATE TABLE operation(
 );
 
 CREATE TABLE mission_employee(
+    id SERIAL PRIMARY KEY,
     mission_code INT NOT NULL,
     employee_registrationNbr INT NOT NULL,
     startDate Date NOT NULL,
     endDate Date DEFAULT NULL,
-    PRIMARY KEY (mission_code, employee_registrationNbr),
     FOREIGN KEY (mission_code) REFERENCES mission(code),
     FOREIGN KEY (employee_registrationNbr) REFERENCES employee(registrationNbr)
 );
