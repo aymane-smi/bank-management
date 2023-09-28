@@ -24,8 +24,21 @@ public class MissionService {
                 throw new Exception("*****   IMPOSSIBLE DE CREER LA MISSION   *****");
 
         }catch(Exception e){
-            System.out.println(e.getClass()+"::"+e.getMessage());
         }
 
+    }
+
+    public void deleteMission(int code){
+        try{
+            if(code == 0)
+                throw new Exception("*****   LA MISSION NE PEUT PAS ETRE VIDE   *****");
+            int result = MissionDao.delete(code);
+            if(result == 1)
+                System.out.println("*****   MISSION SUPPRIMER AVEC SUCCESS   *****");
+            else
+                System.out.println("*****   IMPOSSIBLE DE SUPPRIMER LA MISSION   *****");
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
     }
 }
