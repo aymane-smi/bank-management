@@ -43,4 +43,22 @@ public class MissionDAOImpl implements MissionDAO{
         }
         return Optional.empty();
     }
+
+    @Override
+    public int delete(int code) {
+        try{
+            if(code == 0)
+                throw new Exception("*****   IL N'EXISTE AUCUNNE MISSION AVEC CODE 0   *****");
+            String query = "DELETE FROM mission WHERE code = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, code);
+            int affectedRows = stmt.executeUpdate();
+            if(affectedRows == 0)
+                throw new InsertionException();
+            return affectedRows;
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return 0;
+    }
 }

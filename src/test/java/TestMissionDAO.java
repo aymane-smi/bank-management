@@ -14,4 +14,9 @@ public class TestMissionDAO {
             Assertions.assertEquals(1, obj.getCode());
         });
     }
+    @Test
+    public void deleteMission(){
+        int result = new MissionDAOImpl().delete(1);
+        Assertions.assertEquals(1, result);
+    }
 }
