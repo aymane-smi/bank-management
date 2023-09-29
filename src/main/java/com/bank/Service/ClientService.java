@@ -47,7 +47,6 @@ public class ClientService {
             clt.setEmployee(new EmployeeDAOImpl().findByRegistrationNbr(Integer.parseInt(str)).get());
             Optional<Client> optionalClt = ClientDao.create(clt);
             optionalClt.ifPresent(val->System.out.println(String.format("*****   AJOUT D'UN CLIENT AVEC CODE[%s]   *****", val.getCode())));
-            sc.close();
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
@@ -123,7 +122,6 @@ public class ClientService {
             ClientDao.update(clt).ifPresent((listEmp)->{
                 System.out.println("*****   CLIENT MODIFIER AVEC SUCCESS   *****");
             });
-            sc.close();
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
@@ -164,7 +162,6 @@ public class ClientService {
                     System.out.println(String.format("*****   CODE[%s] NOM[%s] PRENOM[%s] DATE_NAISSANCE[%s] TELE[%s] ADRESSE[%s] EMPLOYEE_REGISTRATION[%d]   *****", c.getCode(), c.getFirstName(), c.getLastName(), c.getBirthDay().toString(), c.getPhone(), c.getAddress(), clt.getEmployee().getRegistrationNbr()));
                 }
             });
-            sc.close();
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
@@ -173,6 +170,7 @@ public class ClientService {
     public void getClientAccount(){
         try{
             Scanner sc = new Scanner(System.in);
+            System.out.println("code:");
             Client clt = ClientDao.findByCode(sc.nextLine()).get();
             ClientDao.getAccounts(clt).ifPresent((client)->{
                 System.out.println("*****   COMPTES D'EMPRANGES   *****");

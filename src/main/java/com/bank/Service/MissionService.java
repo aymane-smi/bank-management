@@ -19,7 +19,7 @@ public class MissionService {
                 throw new Exception("*****   LA MISSION NE PEUT PAS ETRE VIDE   *****");
             Optional<Mission> missionOptional = MissionDao.create(mission);
             if(missionOptional.isPresent())
-                MissionDao.create(mission).ifPresent((obj)->{
+                missionOptional.ifPresent((obj)->{
                     System.out.println("*****   MISSION CREER AVEC SUCCESS   *****");
                 });
             else

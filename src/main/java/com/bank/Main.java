@@ -4,6 +4,8 @@ import com.bank.Service.AccountService;
 import com.bank.Service.ClientService;
 import com.bank.Service.EmployeeService;
 import com.bank.Service.OperationService;
+import com.bank.vue.AssertionVUE;
+import com.bank.vue.MissionVUE;
 
 import java.util.Scanner;
 
@@ -13,6 +15,8 @@ public class Main {
         ClientService clientService = new ClientService();
         AccountService accountService = new AccountService(); // Ajout de la nouvelle classe AccountService
         OperationService operationService = new OperationService();
+        MissionVUE missionVue = new MissionVUE();
+        AssertionVUE assertionVue = new AssertionVUE();
         Scanner scanner = new Scanner(System.in);
         int choice;
 
@@ -23,6 +27,8 @@ public class Main {
             System.out.println("2. Gérer les clients");
             System.out.println("3. Gérer les comptes");
             System.out.println("4. Gérer les opérations");
+            System.out.println("5. Gérer les missions");
+            System.out.println("6. Gérer les affectations");
             System.out.println("0. Quitter");
             System.out.print("Votre choix : ");
 
@@ -46,6 +52,12 @@ public class Main {
                 case 4:
                     // Menu pour gérer les comptes
                     handleOperationMenu(operationService);
+                    break;
+                case 5:
+                    handleMissionMenu(missionVue);
+                    break;
+                case 6:
+                    handleAssertionMenu(assertionVue);
                     break;
                 case 0:
                     System.out.println("Au revoir !");
@@ -162,19 +174,19 @@ public class Main {
         do {
             // Affichez le menu des comptes
             System.out.println("Menu Comptes:");
-            System.out.println("1. Ajouter un compte d'épargne avec compte");
-            System.out.println("2. Ajouter un compte courant avec compte");
-            System.out.println("3. Ajouter un compte d'épargne sans compte");
-            System.out.println("4. Ajouter un compte courant sans compte");
-            System.out.println("5. Supprimer un compte");
-            System.out.println("6. Supprimer un compte d'épargne");
-            System.out.println("7. Supprimer un compte courant");
-            System.out.println("8. Mettre à jour le statut d'un compte");
-            System.out.println("9. Obtenir la liste des comptes");
-            System.out.println("10. Mettre à jour un compte d'épargne");
-            System.out.println("11. Mettre à jour un compte courant");
-            System.out.println("12. Obtenir des comptes par statut");
-            System.out.println("13. Obtenir des comptes par date de création");
+//            System.out.println("1. Ajouter un compte d'épargne avec compte");
+//            System.out.println("2. Ajouter un compte courant avec compte");
+            System.out.println("1. Ajouter un compte d'épargne");
+            System.out.println("2. Ajouter un compte courrant");
+//            System.out.println("5. Supprimer un compte");
+            System.out.println("3. Supprimer un compte d'épargne");
+            System.out.println("4. Supprimer un compte courant");
+            System.out.println("5. Mettre à jour le statuts d'un compte");
+            System.out.println("6. Obtenir la liste des comptes");
+            System.out.println("7. Mettre à jour un compte d'épargne");
+            System.out.println("8. Mettre à jour un compte courant");
+            System.out.println("9. Obtenir des comptes par statut");
+            System.out.println("10. Obtenir des comptes par date de création");
             System.out.println("0. Retour au menu principal");
             System.out.print("Votre choix : ");
 
@@ -189,37 +201,37 @@ public class Main {
                 case 2:
                     accountService.addCurrentWithAccount();
                     break;
+//                case 3:
+//                    accountService.addSavingWithoutAccount();
+//                    break;
+//                case 4:
+//                    accountService.addCurrentWithoutAccount();
+//                    break;
+//                case 3:
+//                    accountService.deleteAccount();
+//                    break;
                 case 3:
-                    accountService.addSavingWithoutAccount();
-                    break;
-                case 4:
-                    accountService.addCurrentWithoutAccount();
-                    break;
-                case 5:
-                    accountService.deleteAccount();
-                    break;
-                case 6:
                     accountService.deleteSavingAccount();
                     break;
-                case 7:
+                case 4:
                     accountService.deleteCurrentAccount();
                     break;
-                case 8:
+                case 5:
                     accountService.updateStatusAccount();
                     break;
-                case 9:
+                case 6:
                     accountService.getAllAccount();
                     break;
-                case 10:
+                case 7:
                     accountService.updateSavingAccount();
                     break;
-                case 11:
+                case 8:
                     accountService.updateCurrentAccount();
                     break;
-                case 12:
+                case 9:
                     accountService.getAccountStatus();
                     break;
-                case 13:
+                case 10:
                     accountService.getAccountByDate();
                     break;
                 case 0:
@@ -257,6 +269,76 @@ public class Main {
                     break;
                 case 3:
                     operationService.findOperation();
+                    break;
+                case 0:
+                    System.out.println("Retour au menu principal.");
+                    break;
+                default:
+                    System.out.println("Choix invalide. Réessayez.");
+            }
+        } while (choice != 0);
+    }
+
+    private static void handleMissionMenu(MissionVUE missionVue) {
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+
+        do {
+            // Affichez le menu des clients
+            System.out.println("Menu Operation:");
+            System.out.println("1. Ajouter une mission");
+            System.out.println("2. Supprimer une mission");
+            System.out.println("3. Afficher tous les missions");
+            System.out.println("0. Retour au menu principal");
+            System.out.print("Votre choix : ");
+             // Lire la nouvelle ligne après le nombre
+            choice = Integer.parseInt(scanner.nextLine());
+            switch (choice) {
+                case 1:
+                    missionVue.addMission();
+                    break;
+                case 2:
+                    missionVue.deleteMission();
+                    break;
+                case 3:
+                    missionVue.findAllMission();
+                    break;
+                case 0:
+                    System.out.println("Retour au menu principal.");
+                    break;
+                default:
+                    System.out.println("Choix invalide. Réessayez.");
+            }
+        } while (choice != 0);
+    }
+
+    private static void handleAssertionMenu(AssertionVUE assertionVue) {
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+
+        do {
+            // Affichez le menu des clients
+            System.out.println("Menu Operation:");
+            System.out.println("1. Ajouter une affectation");
+            System.out.println("2. Supprimer une affectation");
+            System.out.println("3. Afficher tous les missions");
+            System.out.println("4. Statistiques");
+            System.out.println("0. Retour au menu principal");
+            System.out.print("Votre choix : ");
+            // Lire la nouvelle ligne après le nombre
+            choice = Integer.parseInt(scanner.nextLine());
+            switch (choice) {
+                case 1:
+                    assertionVue.addAssertion();
+                    break;
+                case 2:
+                    assertionVue.deleteAssertion();
+                    break;
+                case 3:
+                    assertionVue.findAssertionByEmployee();
+                    break;
+                case 4:
+                    assertionVue.findStats();
                     break;
                 case 0:
                     System.out.println("Retour au menu principal.");

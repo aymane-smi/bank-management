@@ -18,13 +18,11 @@ public class MissionVUE {
         String description = sc.nextLine();
         Mission mission = new Mission(0, name, description);
         missionService.addMission(mission);
-        sc.close();
     }
     public void deleteMission(){
         Scanner sc = new Scanner(System.in);
         System.out.print("code:");
         missionService.deleteMission(sc.nextInt());
-        sc.close();
     }
 
     public void findAllMission(){
