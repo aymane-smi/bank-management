@@ -40,7 +40,6 @@ public class EmployeeService {
             emp.setDateOfRecrutment(LocalDate.parse(tmp_date, formatter));
             Optional<Employee> optionalEmp = EmployeeDao.create(emp);
             optionalEmp.ifPresent(val->System.out.println(String.format("*****   AJOUT D'UNEMPLOI AVEC ID[%d]   *****", val.getRegistrationNbr())));
-            sc.close();
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
@@ -66,7 +65,7 @@ public class EmployeeService {
                 System.out.println(String.format("*****   EMPLOYEE INEXISTANT   *****"));
             else
                 emp.ifPresent(e->{
-                    System.out.println(String.format("*****   MATRICULE[%d] NOM[%S] PRENOM[%s] DATE_NAISSANCE[%s] TELE[%s] ADRESSE[%S] DATE_RECRUTEMENT[%S]   *****", e.getRegistrationNbr(), e.getFirstName(), e.getLastName(), e.getBirthDay().toString(), e.getPhone(), e.getAddress(), e.getDateOfRecrutment().toString()));
+                    System.out.println(String.format("*****   MATRICULE[%d] NOM[%s] PRENOM[%s] DATE_NAISSANCE[%s] TELE[%s] ADRESSE[%s] DATE_RECRUTEMENT[%s]   *****", e.getRegistrationNbr(), e.getFirstName(), e.getLastName(), e.getBirthDay().toString(), e.getPhone(), e.getAddress(), e.getDateOfRecrutment().toString()));
                 });
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
@@ -115,7 +114,6 @@ public class EmployeeService {
                 optionalEmp.ifPresent(val->System.out.println(String.format("*****   AJOUT D'UNEMPLOI AVEC ID[%d]   *****", val.getRegistrationNbr())));
             }
             EmployeeDao.update(emp);
-            sc.close();
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
@@ -160,10 +158,9 @@ public class EmployeeService {
             }
             EmployeeDao.find(emp).ifPresent((listEmp)->{
                 for(Employee e:listEmp){
-                    System.out.println(String.format("*****   MATRICULE[%d] NOM[%S] PRENOM[%s] DATE_NAISSANCE[%s] TELE[%s] ADRESSE[%S] DATE_RECRUTEMENT[%S]   *****", e.getRegistrationNbr(), e.getFirstName(), e.getLastName(), e.getBirthDay().toString(), e.getPhone(), e.getAddress(), e.getDateOfRecrutment().toString()));
+                    System.out.println(String.format("*****   MATRICULE[%d] NOM[%s] PRENOM[%s] DATE_NAISSANCE[%s] TELE[%s] ADRESSE[%s] DATE_RECRUTEMENT[%s]   *****", e.getRegistrationNbr(), e.getFirstName(), e.getLastName(), e.getBirthDay().toString(), e.getPhone(), e.getAddress(), e.getDateOfRecrutment().toString()));
                 }
             });
-            sc.close();
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
         }

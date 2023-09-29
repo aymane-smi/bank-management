@@ -68,11 +68,11 @@ public class MissionDAOImpl implements MissionDAO{
     public Optional<List<Mission>> findAll(){
         try{
             List<Mission> list = new ArrayList<>();
-            Mission mission = new Mission();
             String query = "SELECT * FROM mission";
             PreparedStatement stmt = connection.prepareStatement(query);
             ResultSet result = stmt.executeQuery();
             while(result.next()){
+                Mission mission = new Mission();
                 mission.setCode(result.getInt("code"));
                 mission.setName(result.getString("name"));
                 mission.setDescription(result.getString("description"));

@@ -1,0 +1,104 @@
+@startuml
+!define ENUM_CLASS [enum]
+
+class Person{
+  -firstName: string
+  -lastName: string
+  -birthDay: Date
+  -phone: string
+  -address: string
+}
+
+class Agence{
+  -code: String
+  -nom: String
+  -address: String
+  -phone: String
+}
+
+class Payment{
+  -id: int
+  -transaction_time: LocalDate
+}
+
+class Credit{
+  -number: int
+  -date: LocalDate
+  -status: CreditStatus
+  -balance: real
+  -duration: LocalDate
+  -remarl: String
+}
+
+class Client extends Person{
+  -code: String
+}
+
+class Employee extends Person{
+  -registrationNbr: int
+  -dateOfRecrutment: Date
+}
+
+class Mission {
+  -code: int
+  -name: string
+  -description: string
+}
+
+class MissionEmployee{
+  -startDate: Date
+  -endDate: Date
+}
+
+class Account {
+  -number: int
+  -balance: real
+  -creationDate: Date
+  -status: AccountStatus
+}
+
+class CurrentAccount extends Account{
+  -overDraft: real
+}
+
+class SavingAccount extends Account{
+  -tax: real
+}
+
+enum AccountStatus {
+  ACTIVE
+  SUSPEND
+  BANNED
+}
+
+class Operation {
+  -number: int
+  -creationDate: Date
+  -amount: real
+  -type: OperationType
+}
+
+enum TypeOperation {
+  PAYMENT
+  WITHDRAWAL
+  TRANSFER
+}
+
+AccountStatus --+ Account
+TypeOperation --+ Operation
+
+Operation "*" -- "1" Employee : valider par
+Client *-- Account : Appartient
+Employee "1" -- "*" Account: créer
+Employee "1" -- MissionEmployee
+MissionEmployee -- "*" Mission: exercer
+Account "1" o-- "*" Operation: subir
+Agence "1" -- "*" Account: contient
+Agence "1" -- "*" Employee: contient
+Payment "*" -- "1" Employee: valider
+Payment "1" -- "1" Account: faire
+Payment "1" -- "1" Account: recevoir
+Credit "1" -- "*" Agence: fait dans
+Credit "*" -- "1" Client: demander
+
+@enduml

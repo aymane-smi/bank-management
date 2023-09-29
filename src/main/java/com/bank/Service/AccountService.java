@@ -137,93 +137,99 @@ public class AccountService {
 
     }
 
-    public void addSavingWithoutAccount(){
-        Scanner sc = new Scanner(System.in);
-        Account account = new Account();
-        System.out.print("numero du compte:");
-        String tmp_input = sc.nextLine();
-        if(!tmp_input.isEmpty()){
-            int tmp = Integer.parseInt(tmp_input);
-            account = AccountDao.findAccountByNbr(tmp).get();
-        }
-        System.out.println("code:");
-        String code = sc.nextLine();
-        System.out.println("tax:");
-        tmp_input = sc.nextLine();
-        if(!tmp_input.isEmpty()){
-            double tax = Double.parseDouble(tmp_input);
-            if(tax > 100 || tax < 0){
-                System.out.println("*****   TAX DOIT ETRE ENTRE 0 EST 100   *****");
-                return;
-            }
-            SavingAccount savingAccount = new SavingAccount(account, tax, code);
-            Optional<SavingAccount> optinalSaving = AccountDao.createSavingAccount(savingAccount);
-            if(optinalSaving.isPresent())
-                optinalSaving.ifPresent((saving)->{
-                    System.out.println("*****   NOUVEAU COMPTE D'EMPRANGE ET CRÉER AVEC SUCCESS   *****");
-                });
-            else{
-                System.out.println("*****   ERREUR LORS DE LA CRÉATION DU COMPTE   *****");
-                return;
-            }
-        }
-
-    }
-    public void addCurrentWithoutAccount(){
-        Scanner sc = new Scanner(System.in);
-        Account account = new Account();
-        System.out.print("numero du compte:");
-        String tmp_input = sc.nextLine();
-        if(!tmp_input.isEmpty()){
-            int tmp = Integer.parseInt(tmp_input);
-            account = AccountDao.findAccountByNbr(tmp).get();
-        }
-        System.out.println("code:");
-        String code = sc.nextLine();
-        System.out.println("decouvert:");
-        tmp_input = sc.nextLine();
-        if(!tmp_input.isEmpty()){
-            double overDraft = Double.parseDouble(tmp_input);
-            if(overDraft < 0){
-                System.out.println("*****   LA DECOUVERT DOIT ETRE SUPERIEUR DE 0   *****");
-                return;
-            }
-            CurrentAccount currentAccount = new CurrentAccount(account, overDraft, code);
-            Optional<CurrentAccount> optinalCurrent = AccountDao.createCurrentAccount(currentAccount);
-            if(optinalCurrent.isPresent())
-                optinalCurrent.ifPresent((saving)->{
-                    System.out.println("*****   NOUVEAU COMPTE CURRENT ET CRÉER AVEC SUCCESS   *****");
-                });
-            else{
-                System.out.println("*****   ERREUR LORS DE LA CRÉATION DU COMPTE   *****");
-                return;
-            }
-        }
-    }
-    public void deleteAccount(){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("numero du compte:");
-        if(AccountDao.delete(sc.nextInt()) == 1)
-            System.out.println("*****   COMPTE SUPPRIMER AVEC SUCCESS   *****");
-        else
-            System.out.println("*****   COMPTE INTROUVABLE   *****");
-    }
+//    public void addSavingWithoutAccount(){
+//        Scanner sc = new Scanner(System.in);
+//        Account account = new Account();
+//        System.out.print("numero du compte:");
+//        String tmp_input = sc.nextLine();
+//        if(!tmp_input.isEmpty()){
+//            int tmp = Integer.parseInt(tmp_input);
+//            account = AccountDao.findAccountByNbr(tmp).get();
+//        }
+//        System.out.println("code:");
+//        String code = sc.nextLine();
+//        System.out.println("tax:");
+//        tmp_input = sc.nextLine();
+//        if(!tmp_input.isEmpty()){
+//            double tax = Double.parseDouble(tmp_input);
+//            if(tax > 100 || tax < 0){
+//                System.out.println("*****   TAX DOIT ETRE ENTRE 0 EST 100   *****");
+//                return;
+//            }
+//            SavingAccount savingAccount = new SavingAccount(account, tax, code);
+//            Optional<SavingAccount> optinalSaving = AccountDao.createSavingAccount(savingAccount);
+//            if(optinalSaving.isPresent())
+//                optinalSaving.ifPresent((saving)->{
+//                    System.out.println("*****   NOUVEAU COMPTE D'EMPRANGE ET CRÉER AVEC SUCCESS   *****");
+//                });
+//            else{
+//                System.out.println("*****   ERREUR LORS DE LA CRÉATION DU COMPTE   *****");
+//                return;
+//            }
+//        }
+//
+//    }
+//    public void addCurrentWithoutAccount(){
+//        Scanner sc = new Scanner(System.in);
+//        Account account = new Account();
+//        System.out.print("numero du compte:");
+//        String tmp_input = sc.nextLine();
+//        if(!tmp_input.isEmpty()){
+//            int tmp = Integer.parseInt(tmp_input);
+//            account = AccountDao.findAccountByNbr(tmp).get();
+//        }
+//        System.out.println("code:");
+//        String code = sc.nextLine();
+//        System.out.println("decouvert:");
+//        tmp_input = sc.nextLine();
+//        if(!tmp_input.isEmpty()){
+//            double overDraft = Double.parseDouble(tmp_input);
+//            if(overDraft < 0){
+//                System.out.println("*****   LA DECOUVERT DOIT ETRE SUPERIEUR DE 0   *****");
+//                return;
+//            }
+//            CurrentAccount currentAccount = new CurrentAccount(account, overDraft, code);
+//            Optional<CurrentAccount> optinalCurrent = AccountDao.createCurrentAccount(currentAccount);
+//            if(optinalCurrent.isPresent())
+//                optinalCurrent.ifPresent((saving)->{
+//                    System.out.println("*****   NOUVEAU COMPTE CURRENT ET CRÉER AVEC SUCCESS   *****");
+//                });
+//            else{
+//                System.out.println("*****   ERREUR LORS DE LA CRÉATION DU COMPTE   *****");
+//                return;
+//            }
+//        }
+//    }
+//    public void deleteAccount(){
+//        Scanner sc = new Scanner(System.in);
+//        System.out.println("numero du compte:");
+//        if(AccountDao.delete(sc.nextInt()) == 1)
+//            System.out.println("*****   COMPTE SUPPRIMER AVEC SUCCESS   *****");
+//        else
+//            System.out.println("*****   COMPTE INTROUVABLE   *****");
+//    }
 
     public void deleteSavingAccount(){
         Scanner sc = new Scanner(System.in);
         System.out.println("code du compte:");
-        if(AccountDao.deleteSaving(sc.nextLine()) == 1)
+        String code = sc.nextLine();
+        int account_nbr = AccountDao.findSaving(code).get().getNumber();
+        if(AccountDao.deleteSaving(code) == 1){
+            AccountDao.delete(account_nbr);
             System.out.println("*****   COMPTE D'EPRANGE SUPPRIMER AVEC SUCCESS   *****");
-        else
+        }else
             System.out.println("*****   COMPTE INTROUVABLE   *****");
     }
 
     public void deleteCurrentAccount(){
         Scanner sc = new Scanner(System.in);
         System.out.println("code du compte:");
-        if(AccountDao.deleteCurrent(sc.nextLine()) == 1)
+        String code = sc.nextLine();
+        int account_nbr = AccountDao.findCurrent(code).get().getNumber();
+        if(AccountDao.deleteCurrent(code) == 1){
+            AccountDao.delete(account_nbr);
             System.out.println("*****   COMPTE CURRENT SUPPRIMER AVEC SUCCESS   *****");
-        else
+        }else
             System.out.println("*****   COMPTE INTROUVABLE   *****");
     }
 
@@ -284,7 +290,6 @@ public class AccountService {
             AccountDao.update(acc).ifPresent((listEmp)->{
                 System.out.println("*****   COMPTE MODIFIER AVEC SUCCESS   *****");
             });
-            sc.close();
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
@@ -321,7 +326,6 @@ public class AccountService {
             AccountDao.update(acc).ifPresent((listEmp)->{
                 System.out.println("*****   COMPTE MODIFIER AVEC SUCCESS   *****");
             });
-            sc.close();
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
