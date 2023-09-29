@@ -1,9 +1,12 @@
 package com.bank.Service;
 
 import com.bank.DAO.AssertionDAOImpl;
+import com.bank.DAO.MissionDAOImpl;
 import com.bank.Entity.MissionEmployee;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class AssertionService {
@@ -37,6 +40,15 @@ public class AssertionService {
                 System.out.println("*****   IMPOSSIBLE DE SUPPRIMER LA ASSERTION   *****");
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+    }
+
+    public void showStats(){
+        HashMap<Integer, Integer> stats = AssertionDao.getStatistics().get();
+        for (Map.Entry<Integer, Integer> entry : stats.entrySet()) {
+            Integer key = entry.getKey();
+            Integer value = entry.getValue();
+            System.out.println("MISSION_CODE[" + new MissionDAOImpl().findByCode(key).get().getName() + "] NOMBRE_EMPLOYEE[: " + value+"]");
         }
     }
 

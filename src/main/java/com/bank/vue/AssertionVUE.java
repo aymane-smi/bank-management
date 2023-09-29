@@ -52,4 +52,8 @@ public class AssertionVUE {
         assertionService.findAssertionByEmployee(sc.nextInt());
         sc.close();
     }
+
+    public void findStats(){
+        assertionService.showStats();
+    }
 }

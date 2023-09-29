@@ -8,9 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class AssertionDAOImpl implements AssertionDAO {
     private Connection connection;
@@ -83,6 +81,23 @@ public class AssertionDAOImpl implements AssertionDAO {
                 list.add(tmp);
             }
             return Optional.of(list);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<HashMap<Integer, Integer>> getStatistics() {
+        try{
+            HashMap<Integer, Integer> map = new HashMap<>();
+            String query = "SELECT mission_code, COUNT(employee_registrationNbr) AS employee_count FROM mission_employee GROUP BY mission_code;";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                map.put(result.getInt("mission_code"), result.getInt("employee_count"));
+            }
+            return Optional.of(map);
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
