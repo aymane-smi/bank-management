@@ -10,4 +10,5 @@ public interface MissionDAO {
     public int delete(int code);
 
     public Optional<List<Mission>> findAll();
+    public Optional<Mission> findByCode(int code);
 }
