@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class AssertionDAOImpl implements AssertionDAO {
@@ -60,5 +62,30 @@ public class AssertionDAOImpl implements AssertionDAO {
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
         return 0;
+    }
+    @Override
+    public Optional<List<MissionEmployee>> findByEmployee(int registrationNbr){
+        try{
+            List<MissionEmployee> list = new ArrayList<>();
+            MissionEmployee tmp = new MissionEmployee();
+            if(registrationNbr == 0)
+                throw new Exception("*****   IL N'EXISTE AUCUN EMPLOYEE AVEC NOMBRE DE MATRICULE 0   *****");
+            String query = "SELECT * FROM mission_employee WHERE employee_registrationNbr = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, registrationNbr);
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                tmp.setId(result.getInt("id"));
+                tmp.setEmployee(new EmployeeDAOImpl().findByRegistrationNbr(result.getInt("employee_registrationNbr")).get());
+                tmp.setMission(new MissionDAOImpl().findByCode(result.getInt("mission_code")).get());
+                tmp.setStartDate(result.getDate("startDate").toLocalDate());
+                tmp.setEndDate(result.getDate("endDate").toLocalDate());
+                list.add(tmp);
+            }
+            return Optional.of(list);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
     }
 }

@@ -6,9 +6,10 @@ import com.bank.Entity.MissionEmployee;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
 
-public class TestAssertion {
+public class TestAssertionDAO {
     @Test
     public void testCreate(){
         MissionEmployee tmp = new MissionEmployee();
@@ -26,5 +27,13 @@ public class TestAssertion {
     public void testDelete(){
         int result = new AssertionDAOImpl().delete(1);
         Assertions.assertEquals(1, result);
+    }
+    @Test
+    public void testFindByEmployee(){
+        Optional<List<MissionEmployee>> optionalList = new AssertionDAOImpl().findByEmployee(11);
+        optionalList.get().forEach((obj)->{
+            System.out.println(String.format("*****   ID[%d] NOM_MISSION[%s] DATE_DEBUT[%s] DATE_FIN[%s]   *****", obj.getId(), obj.getMission().getName(), obj.getStartDate(), obj.getEndDate()));
+        });
+        Assertions.assertEquals(1, optionalList.get().size());
     }
 }

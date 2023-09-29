@@ -3,6 +3,7 @@ package com.bank.Service;
 import com.bank.DAO.AssertionDAOImpl;
 import com.bank.Entity.MissionEmployee;
 
+import java.util.List;
 import java.util.Optional;
 
 public class AssertionService {
@@ -34,6 +35,21 @@ public class AssertionService {
                 System.out.println("*****   ASSERTION SUPPRIMER AVEC SUCCESS   *****");
             else
                 System.out.println("*****   IMPOSSIBLE DE SUPPRIMER LA ASSERTION   *****");
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+    }
+
+    public void findAssertionByEmployee(int registrationNbr){
+        try{
+            if(registrationNbr == 0)
+                throw new Exception("*****   LA ASSERTION NE PEUT PAS ACCEPTER UN EMPLOYEE AVEC MATRICULE 0   *****");
+            else{
+                Optional<List<MissionEmployee>> list = AssertionDao.findByEmployee(registrationNbr);
+                list.get().forEach((obj)->{
+                    System.out.println(String.format("*****   ID[%d] NOM_MISSION[%s] DATE_DEBUT[%s] DATE_FIN[%s]   *****", obj.getId(), obj.getMission().getName(), obj.getStartDate(), obj.getEndDate()));
+                });
+            }
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
         }

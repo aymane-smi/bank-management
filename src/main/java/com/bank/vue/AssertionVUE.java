@@ -45,4 +45,11 @@ public class AssertionVUE {
         assertionService.deleteAssertion(sc.nextInt());
         sc.close();
     }
+
+    public void findAssertionByEmployee(){
+        Scanner sc = new Scanner(System.in);
+        System.out.print("matricule employee:");
+        assertionService.findAssertionByEmployee(sc.nextInt());
+        sc.close();
+    }
 }
