@@ -19,55 +19,14 @@ public class OperationService {
         OperationDao = new OperationDAOImpl();
     }
 
-    public void createOperation(){
-        try{
-            Scanner sc = new Scanner(System.in);
-            System.out.print("nombre employee:");
-            Employee emp = new EmployeeDAOImpl().findByRegistrationNbr(sc.nextInt()).get();
-            sc.nextLine();
-            System.out.print("nombre account:");
-            Account acc = new AccountDAOImpl().findAccountByNbr(sc.nextInt()).get();
-            sc.nextLine();
-            System.out.print("Date de creation(aaaa-mm-jj):");
-            String tmp_date = sc.nextLine();
-            LocalDate inputDate;
-            if(!tmp_date.isEmpty()){
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                inputDate = LocalDate.parse(tmp_date, formatter);
-            }else{
-                throw new Exception("*****   DATE INVALIDE   *****");
-            }
-            System.out.print("type d'operation(PAYMENT|WITHDRAWAL):");
-            String tmp_string = sc.nextLine();
-            System.out.print("montant:");
-            double amount = sc.nextDouble();
-            if(tmp_string.equals("WITHDRAWAL")){
-                if(acc.getBalance()-amount < 0)
-                    throw new Exception("*****   COMPTE AVEC MONTANT INSUFFISANT   *****");
-                acc.setBalance(acc.getBalance() - amount);
-            }else if(tmp_string.equals("PAYMENT"))
-                acc.setBalance(acc.getBalance() + amount);
-            Operation op = new Operation(0, inputDate, amount, OperationType.valueOf(tmp_string));
-            new AccountDAOImpl().update(acc);
-            op.setAccount(acc);
-            op.setEmployee(emp);
-            Optional<Operation> optionalOperation = OperationDao.create(op);
-            optionalOperation.ifPresent((val)->{
-                System.out.print("*****   OPERATION FAITE AVEC SUCCESS   *****");
-            });
-        }catch(Exception e){
-            System.out.print(e.getStackTrace());
-
-            System.out.println(e.getClass()+"::"+e.getMessage());
-        }
+    public void createOperation(Operation op){
+        Optional<Operation> optionalOperation = OperationDao.create(op);
+        optionalOperation.ifPresent((val)->{
+            System.out.print("*****   OPERATION FAITE AVEC SUCCESS   *****");
+        });
     }
 
-    public void deleteOperation(){
-        Scanner sc =  new Scanner(System.in);
-        System.out.print("number d'operation:");
-        Operation op = new Operation();
-        op.setNumber(sc.nextInt());
-        op = OperationDao.findByNumber(op).get();
+    public void deleteOperation(Operation op){
         if(op.getType() == OperationType.PAYMENT){
             Account acc = new AccountDAOImpl().findAccountByNbr(op.getAccount().getNumber()).get();
             acc.setBalance(acc.getBalance() - op.getAmount());
@@ -82,13 +41,7 @@ public class OperationService {
                 System.out.println("*****   OPERATION SUPPRIMER AVEC SUCCESS   *****");
         }
     }
-    public void findOperation(){
-        Scanner sc =  new Scanner(System.in);
-        System.out.print("number d'operation:");
-        int number = sc.nextInt();
-        sc.nextLine();
-        Operation op = new Operation();
-        op.setNumber(number);
+    public void findOperation(Operation op){
         op = OperationDao.findByNumber(op).get();
         System.out.print(String.format("*****   OPERATION_NUMBER[%d] MONTANT[%f] TYPE[%s] NOMBRE_COMPTE[%d] EMPLOYEE_REGISTRATION[%d]", op.getNumber(), op.getAmount(), op.getType().name(), op.getAccount().getNumber(), op.getEmployee().getRegistrationNbr()));
     }
