@@ -5,12 +5,12 @@ import com.bank.Enum.AccountStatus;
 import java.time.LocalDate;
 
 public class Account {
-    private int number;
-    private double balance;
-    private LocalDate creationDate;
-    private AccountStatus status;
-    private Client client;
-    public Account(){}
+    protected int number;
+    protected double balance;
+    protected LocalDate creationDate;
+    protected AccountStatus status;
+    protected Client client;
+    protected Account(){}
 
     public Account(int number, double balance, LocalDate creationDate, AccountStatus status, Client client) {
         this.number = number;
