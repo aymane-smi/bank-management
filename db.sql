@@ -78,6 +78,35 @@ CREATE TABLE mission_employee(
     FOREIGN KEY (employee_registrationNbr) REFERENCES employee(registrationNbr)
 );
 
+CREATE TABLE agency(
+    code Text PRIMARY KEY,
+    name TEXT NOT NULL,
+    address TEXT NOT NULL,
+    phone TEXT NOT NULL
+);
+
+CREATE TABLE payment(
+    id SERIAL PRIMARY KEY,
+    transaction_time TIMESTAMP NOT NULL,
+    from_account INT NOT NULL,
+    to_account INT NOT NULL,
+    employee_registrationNbr INT NOT NULL,
+    FOREIGN KEY (from_account) REFERENCES account(number),
+    FOREIGN KEY (to_account) REFERENCES account(number),
+    FOREIGN KEY (employee_registrationNbr) REFERENCES employee(registrationNbr)
+);
+
+CREATE TABLE employee_history(
+    id TEXT PRIMARY KEY,
+    employee_registrationNbr INT NOT NULL,
+    agency_code TEXT NOT NULL,
+    transfer_date DATE NOT NULL,
+    FOREIGN KEY (employee_registrationNbr) REFERENCES employee(registrationNbr),
+    FOREIGN KEY (agency_code) REFERENCES agency(code)
+);
+-- SEQUENCES
+
+
 CREATE OR REPLACE FUNCTION getSavingAccounts() RETURNS TABLE (
     balance NUMERIC(10, 4),
     creationDate DATE,
