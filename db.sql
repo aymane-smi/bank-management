@@ -78,8 +78,11 @@ CREATE TABLE mission_employee(
     FOREIGN KEY (employee_registrationNbr) REFERENCES employee(registrationNbr)
 );
 
+-- SEQUENCES
+CREATE SEQUENCE agency_seq START 1;
+
 CREATE TABLE agency(
-    code Text PRIMARY KEY,
+    code VARCHAR(9) DEFAULT ('AGENCY' || nextval('agency_seq')::text) PRIMARY KEY,
     name TEXT NOT NULL,
     address TEXT NOT NULL,
     phone TEXT NOT NULL
@@ -104,7 +107,6 @@ CREATE TABLE employee_history(
     FOREIGN KEY (employee_registrationNbr) REFERENCES employee(registrationNbr),
     FOREIGN KEY (agency_code) REFERENCES agency(code)
 );
--- SEQUENCES
 
 
 CREATE OR REPLACE FUNCTION getSavingAccounts() RETURNS TABLE (

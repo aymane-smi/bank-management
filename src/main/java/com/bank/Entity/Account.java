@@ -10,7 +10,7 @@ public class Account {
     protected LocalDate creationDate;
     protected AccountStatus status;
     protected Client client;
-    protected Account(){}
+    public Account(){}
 
     public Account(int number, double balance, LocalDate creationDate, AccountStatus status, Client client) {
         this.number = number;

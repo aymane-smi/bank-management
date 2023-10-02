@@ -1,0 +1,45 @@
+package com.bank.DAO;
+
+import com.bank.Connection.JDBCConnection;
+import com.bank.Entity.Agency;
+import com.bank.Exception.InsertionException;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Optional;
+
+public class AgencyDAOImpl implements AgencyDAO{
+    Connection connection;
+
+    public AgencyDAOImpl(){
+        connection = JDBCConnection.getConnection();
+    }
+    @Override
+    public Optional<Agency> create(Agency agency) {
+        try{
+            if(agency == null)
+                throw new Exception("*****   Impossible d'ajouter une agence vide   *****");
+            String query = "INSERT INTO agency(name, address, phone) VALUES(?, ?, ?)";
+            PreparedStatement stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, agency.getName());
+            stmt.setString(2, agency.getAddress());
+            stmt.setString(3, agency.getPhone());
+            int affectedRows = stmt.executeUpdate();
+            if(affectedRows == 0)
+                throw new InsertionException();
+            else{
+                ResultSet generatedKeys = stmt.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    String generatedId = generatedKeys.getString(1);
+                    agency.setCode(generatedId);
+                }
+                return Optional.of(agency);
+            }
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
+}
