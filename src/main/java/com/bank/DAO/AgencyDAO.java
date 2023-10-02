@@ -6,4 +6,5 @@ import java.util.Optional;
 
 public interface AgencyDAO {
     public Optional<Agency> create(Agency agency);
+    public int delete(String code);
 }

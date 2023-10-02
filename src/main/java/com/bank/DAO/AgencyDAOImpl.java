@@ -42,4 +42,22 @@ public class AgencyDAOImpl implements AgencyDAO{
         }
         return Optional.empty();
     }
+
+    @Override
+    public int delete(String code) {
+        try{
+            if(code == "")
+                throw new Exception("*****   LE CODE DE L'AGENCE NE PEUT PAS ETRE VIDE   *****");
+            String query = "DELETE FROM agency WHERE code = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, code);
+            int affectedRows = stmt.executeUpdate();
+            if(affectedRows == 0)
+                throw new Exception("*****   AUCUNNE AGENCE N'EST SUPPRIMER   *****");
+            return affectedRows;
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return 0;
+    }
 }

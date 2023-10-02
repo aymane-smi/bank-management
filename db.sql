@@ -91,6 +91,7 @@ CREATE TABLE agency(
 CREATE TABLE payment(
     id SERIAL PRIMARY KEY,
     transaction_time TIMESTAMP NOT NULL,
+    balance NOT NULL NUMERIC(10,4),
     from_account INT NOT NULL,
     to_account INT NOT NULL,
     employee_registrationNbr INT NOT NULL,

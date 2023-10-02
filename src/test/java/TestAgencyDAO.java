@@ -14,4 +14,10 @@ public class TestAgencyDAO {
             Assertions.assertEquals("AGENCY1", obj.getCode());
         });
     }
+
+    @Test
+    public void testDelete(){
+        int result = new AgencyDAOImpl().delete("AGENCY1");
+        Assertions.assertEquals(1, result);
+    }
 }

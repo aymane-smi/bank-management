@@ -23,4 +23,9 @@ public class AgencyVUE {
         agency.setPhone(sc.nextLine());
         agencyService.create(agency);
     }
+
+    public void deleteAgency(){
+        Scanner sc = new Scanner(System.in);
+        agencyService.delete(sc.nextLine());
+    }
 }
