@@ -7,6 +7,16 @@ DROP TABLE IF EXISTS operation;
 DROP TABLE IF EXISTS mission_employee;
 DROP TABLE IF EXISTS account;
 
+-- SEQUENCES
+CREATE SEQUENCE agency_seq START 1;
+
+CREATE TABLE agency(
+    code VARCHAR(9) DEFAULT ('AGENCY' || nextval('agency_seq')::text) PRIMARY KEY,
+    name TEXT NOT NULL,
+    address TEXT NOT NULL,
+    phone TEXT NOT NULL
+);
+
 CREATE TABLE client(
       code TEXT PRIMARY KEY,
       firstName TEXT NOT NULL,
@@ -15,7 +25,9 @@ CREATE TABLE client(
       phone TEXT NOT NULL,
       address TEXT NOT NULL,
       employee_registrationNbr INT,
-      FOREIGN KEY(employee_registrationNbr) REFERENCES employee(registrationNbr)
+      agency_code VARCHAR(9) NOT NULL,
+      FOREIGN KEY(employee_registrationNbr) REFERENCES employee(registrationNbr),
+      FOREIGN KEY(agency_code) REFERENCES agency(code)
 );
 
 CREATE TABLE employee(
@@ -76,16 +88,6 @@ CREATE TABLE mission_employee(
     endDate Date DEFAULT NULL,
     FOREIGN KEY (mission_code) REFERENCES mission(code),
     FOREIGN KEY (employee_registrationNbr) REFERENCES employee(registrationNbr)
-);
-
--- SEQUENCES
-CREATE SEQUENCE agency_seq START 1;
-
-CREATE TABLE agency(
-    code VARCHAR(9) DEFAULT ('AGENCY' || nextval('agency_seq')::text) PRIMARY KEY,
-    name TEXT NOT NULL,
-    address TEXT NOT NULL,
-    phone TEXT NOT NULL
 );
 
 CREATE TABLE payment(

@@ -57,4 +57,10 @@ public class AgencyVUE {
             agency.setPhone(sc.nextLine());
         agencyService.update(agency);
     }
+
+    public void findAllAgencies(){
+        System.out.println("*****   AGENCES INFO   *****");
+        for(Agency agency: agencyService.find())
+            System.out.println(String.format("***** CODE[%s] NOME[%s] ADRESSE[%s] TELEPHONE[%s]", agency.getCode(), agency.getName(), agency.getAddress(), agency.getPhone()));
+    }
 }

@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class AgencyDAOImpl implements AgencyDAO{
@@ -95,6 +97,25 @@ public class AgencyDAOImpl implements AgencyDAO{
                         new Agency(result.getString("code"), result.getString("name"), result.getString("address"), result.getString("phone"))
                 );
             }
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<List<Agency>> find() {
+        try{
+            List<Agency> list = new ArrayList<>();
+            String query = "SELECT *  FROM agency";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                list.add(
+                        new Agency(result.getString("code"), result.getString("name"), result.getString("address"), result.getString("phone"))
+                );
+            }
+            return Optional.of(list);
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
         }

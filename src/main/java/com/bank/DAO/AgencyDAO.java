@@ -2,6 +2,7 @@ package com.bank.DAO;
 
 import com.bank.Entity.Agency;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface AgencyDAO {
@@ -10,4 +11,5 @@ public interface AgencyDAO {
 
     public Optional<Agency> update(Agency agency);
     public Optional<Agency> findByCode(String code);
+    public Optional<List<Agency>> find();
 }

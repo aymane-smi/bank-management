@@ -4,6 +4,7 @@ import com.bank.DAO.AgencyDAO;
 import com.bank.DAO.AgencyDAOImpl;
 import com.bank.Entity.Agency;
 
+import java.util.List;
 import java.util.Optional;
 
 public class AgencyService {
@@ -48,5 +49,10 @@ public class AgencyService {
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
+    }
+
+    public List<Agency> find(){
+        Optional<List<Agency>> optionalAgency = agencyDao.find();
+        return optionalAgency.get();
     }
 }

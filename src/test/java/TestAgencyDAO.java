@@ -3,6 +3,7 @@ import com.bank.Entity.Agency;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
 
 public class TestAgencyDAO {
@@ -28,6 +29,14 @@ public class TestAgencyDAO {
         Optional<Agency> optionalAgency = new AgencyDAOImpl().update(agency);
         optionalAgency.ifPresent((obj)->{
             Assertions.assertEquals("name*", obj.getName());
+        });
+    }
+
+    @Test
+    public void testFind(){
+        Optional<List<Agency>> optionalAgency = new AgencyDAOImpl().find();
+        optionalAgency.ifPresent((list)->{
+            Assertions.assertEquals(0, list.size());
         });
     }
 }
