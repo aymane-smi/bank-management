@@ -60,4 +60,44 @@ public class AgencyDAOImpl implements AgencyDAO{
         }
         return 0;
     }
+
+    @Override
+    public Optional<Agency> update(Agency agency) {
+        try{
+            if(agency == null)
+                throw new Exception("*****   Impossible d'ajouter une agence vide   *****");
+            String query = "UPDATE agency SET name = ?, address = ?, phone = ? WHERE code = ? ";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, agency.getName());
+            stmt.setString(2, agency.getAddress());
+            stmt.setString(3, agency.getPhone());
+            stmt.setString(4, agency.getCode());
+            int affectedRows = stmt.executeUpdate();
+            if(affectedRows == 1)
+                return Optional.of(agency);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Agency> findByCode(String code) {
+        try{
+            if(code == "")
+                throw new Exception("*****   LE CODE DE L'AGENCE NE PEUT PAS ETRE VIDE   *****");
+            String query = "SELECT *  FROM agency WHERE code = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, code);
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                return Optional.of(
+                        new Agency(result.getString("code"), result.getString("name"), result.getString("address"), result.getString("phone"))
+                );
+            }
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
 }

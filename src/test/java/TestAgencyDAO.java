@@ -11,7 +11,7 @@ public class TestAgencyDAO {
         Agency agency = new Agency("", "name", "address", "123456789");
         Optional<Agency> optionalAgency = new AgencyDAOImpl().create(agency);
         optionalAgency.ifPresent((obj)->{
-            Assertions.assertEquals("AGENCY1", obj.getCode());
+            Assertions.assertEquals("AGENCY2", obj.getCode());
         });
     }
 
@@ -19,5 +19,15 @@ public class TestAgencyDAO {
     public void testDelete(){
         int result = new AgencyDAOImpl().delete("AGENCY1");
         Assertions.assertEquals(1, result);
+    }
+
+    @Test
+    public void testUpdate(){
+        Agency agency = new AgencyDAOImpl().findByCode("AGENCY2").get();
+        agency.setName("name*");
+        Optional<Agency> optionalAgency = new AgencyDAOImpl().update(agency);
+        optionalAgency.ifPresent((obj)->{
+            Assertions.assertEquals("name*", obj.getName());
+        });
     }
 }

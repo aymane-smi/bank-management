@@ -35,4 +35,18 @@ public class AgencyService {
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
     }
+
+    public void update(Agency agency){
+        try{
+            if(agency == null)
+                throw new Exception("*****   L'AGENCE NE PAS ETRE NULL   *****");
+            Optional<Agency> optionalAgency = agencyDao.update(agency);
+            optionalAgency.ifPresent((obj)->{
+                System.out.println("*****   AGENCE MODIFER AVEC SUCCESS   *****");
+                System.out.println(String.format("***** CODE[%s] NOME[%s] ADRESSE[%s] TELEPHONE[%s]", obj.getCode(), obj.getName(), obj.getAddress(), obj.getPhone()));
+            });
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+    }
 }
