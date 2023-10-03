@@ -16,6 +16,7 @@ public class Client extends Person{
     }
 
     private Map<String, List> accounts= new HashMap<>();
+    private Agency agency;
 
     public Client(){}
     public Client(String code, String firstName, String lastName, LocalDate birthDay, String phone, String address) {

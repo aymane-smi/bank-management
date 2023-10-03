@@ -3,13 +3,15 @@ package com.bank.vue;
 import com.bank.DAO.AgencyDAOImpl;
 import com.bank.Entity.Agency;
 import com.bank.Service.AgencyService;
+import com.bank.Service.EmployeeService;
 
 import java.util.Scanner;
 
 public class AgencyVUE {
     private AgencyService agencyService;
+    private EmployeeService employeeService;
     private AgencyDAOImpl agencyDAO;
-    public AgencyVUE(AgencyService agencyService, AgencyDAOImpl agencyDAO){
+    public AgencyVUE(AgencyService agencyService, AgencyDAOImpl agencyDAO, EmployeeService employeeService){
         this.agencyService = agencyService;
         this.agencyDAO = agencyDAO;
     }
@@ -71,7 +73,18 @@ public class AgencyVUE {
             Agency agency = agencyService.findByAddress(sc.nextLine());
             System.out.println(String.format("***** CODE[%s] NOME[%s] ADRESSE[%s] TELEPHONE[%s]", agency.getCode(), agency.getName(), agency.getAddress(), agency.getPhone()));
         }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+    }
 
+    public void findByEmployee(){
+        try{
+            Scanner sc = new Scanner(System.in);
+            System.out.print("employee matricule:");
+            Agency agency = employeeService.findEmployee(sc.nextInt()).getAgency();
+            System.out.println(String.format("***** CODE[%s] NOME[%s] ADRESSE[%s] TELEPHONE[%s]", agency.getCode(), agency.getName(), agency.getAddress(), agency.getPhone()));
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
         }
     }
 }
