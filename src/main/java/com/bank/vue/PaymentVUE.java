@@ -45,4 +45,14 @@ public class PaymentVUE {
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
     }
+
+    public void deletePayment(){
+        try{
+            System.out.print("id de virment:");
+            if(paymentService.delete(sc.nextInt()) == 1)
+                System.out.println("*****   VIRMENT SUPPRIMER AVEC SUCCESS   *****");
+        }catch (Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+    }
 }

@@ -40,4 +40,23 @@ public class PaymentDAOImpl implements PaymentDAO{
         }
         return Optional.empty();
     }
+
+    @Override
+    public int delete(int id) {
+        try{
+            if(id == 0)
+                throw new Exception("*****   L'ID DU VIRMENT NE DOIT PAS ETRE 0   *****");
+            String query = "DELETE FROM payment WHERE id = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, id);
+            int affectedRows = stmt.executeUpdate();
+            if(affectedRows == 1 )
+                return 1;
+            else
+                return 0;
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return 0;
+    }
 }

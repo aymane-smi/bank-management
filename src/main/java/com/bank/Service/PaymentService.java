@@ -17,4 +17,10 @@ public class PaymentService {
         else
             return paymentDao.create(payment).get();
     }
+
+    public int delete(int id) throws Exception{
+        if(id == 0)
+            throw new Exception("*****   L'ID DU VIRMENT NE DOIT PAS ETRE 0   *****");
+        return paymentDao.delete(id);
+    }
 }

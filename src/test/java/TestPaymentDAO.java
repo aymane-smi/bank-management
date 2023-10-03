@@ -23,4 +23,10 @@ public class TestPaymentDAO {
             Assertions.assertEquals(1, p.getId());
         });
     }
+
+    @Test
+    public void testDelete(){
+        int result = new PaymentDAOImpl().delete(1);
+        Assertions.assertEquals(1, result);
+    }
 }
