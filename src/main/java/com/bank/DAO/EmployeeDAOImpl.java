@@ -1,6 +1,7 @@
 package com.bank.DAO;
 
 import com.bank.Connection.JDBCConnection;
+import com.bank.Entity.Agency;
 import com.bank.Entity.Employee;
 import com.bank.Exception.DeleteException;
 import com.bank.Exception.InsertionException;
@@ -167,6 +168,27 @@ public class EmployeeDAOImpl implements EmployeeDAO{
                 list.add(emp);
             }
             return Optional.of(list);
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Employee> changeAgency(Employee emp, String agencyCode) {
+        try{
+            if(emp.getAgency() == null)
+                throw new Exception("*****   LE CODE AGENCE DE L'AGENCE NE DOIT PAS ETRE VIDE    *****");
+            String query = "UPDATE employee SET agency_code = ? WHERE registrationNbr";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, emp.getAgency().getCode());
+            stmt.setInt(2, emp.getRegistrationNbr());
+            int affectedRows = stmt.executeUpdate();
+            if(affectedRows == 1){
+                emp.setAgency(new AgencyDAOImpl().findByCode(emp.getAgency().getCode()).get());
+            }else{
+                return Optional.empty();
+            }
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
         }

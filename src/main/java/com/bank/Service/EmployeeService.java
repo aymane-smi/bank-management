@@ -157,4 +157,10 @@ public class EmployeeService {
         }
     }
 
+    public Employee changeAgency(Employee emp, String agencyCode) throws Exception{
+        if(emp == null || emp.getAgency() == null)
+            throw new Exception("*****   L'AGENCE/EMPLOYEE NE PEUT PAS ETRE NULL OU CODE D'AGENCE EST VIDE   *****");
+        return EmployeeDao.changeAgency(emp, agencyCode).get();
+    }
+
 }

@@ -12,4 +12,5 @@ public interface EmployeeDAO {
     public Optional<Employee> findByRegistrationNbr(int registrationNbr);
     public Optional<List<Employee>> findAll();
     public Optional<List<Employee>> find(Employee employee);
+    public Optional<Employee> changeAgency(Employee emp, String agencyCode);
 }
