@@ -26,6 +26,11 @@ public class AgencyEmployeeDAOImpl implements AgencyEmployeeDAO{
             stmt.setInt(1, registrationNbr);
             stmt.setString(2, agency_code);
             stmt.setDate(3, java.sql.Date.valueOf(date));
+            int affectRows = stmt.executeUpdate();
+            if(affectRows == 1)
+                return true;
+            else
+                return false;
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
@@ -36,7 +41,7 @@ public class AgencyEmployeeDAOImpl implements AgencyEmployeeDAO{
     public List<AgencyEmployee> find() {
         List<AgencyEmployee> list = new ArrayList<>();
         try{
-            String query = "SELECT * FROM history_employee";
+            String query = "SELECT * FROM employee_history";
             PreparedStatement stmt = connection.prepareStatement(query);
             ResultSet result = stmt.executeQuery();
             while(result.next()){

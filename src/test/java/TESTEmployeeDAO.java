@@ -1,3 +1,4 @@
+import com.bank.DAO.AgencyDAOImpl;
 import com.bank.DAO.EmployeeDAOImpl;
 import com.bank.Entity.Employee;
 import org.junit.jupiter.api.Assertions;
@@ -13,7 +14,8 @@ public class TESTEmployeeDAO {
     @Test
     public void testCreate(){
         Employee tmp = new Employee("test", "test", LocalDate.of(2023, 10, 11), "123456789", "address", 0, LocalDate.of(2023, 10, 11));
-        Optional<Employee> tmp1 = new EmployeeDAOImpl().create(tmp);
+        tmp.setAgency(new AgencyDAOImpl().findByCode("AGENCY1").get());
+        Optional<Employee> tmp1 = new EmployeeDAOImpl().create(tmp, LocalDate.now());
         tmp1.ifPresent((emp)->{
             Assertions.assertNotNull(emp);
             Assertions.assertTrue(emp.getRegistrationNbr() != 0);

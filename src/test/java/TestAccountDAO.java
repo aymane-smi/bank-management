@@ -1,5 +1,7 @@
 import com.bank.DAO.AccountDAOImpl;
+import com.bank.DAO.AgencyDAOImpl;
 import com.bank.DAO.ClientDAOImpl;
+import com.bank.DAO.EmployeeDAOImpl;
 import com.bank.Entity.*;
 import com.bank.Enum.AccountStatus;
 import org.junit.jupiter.api.Assertions;
@@ -12,10 +14,13 @@ import java.util.Optional;
 public class TestAccountDAO {
     @Test
     public void testCreate(){
-        Client client = new Client("code1", "test", "test", LocalDate.of(2023, 10, 11), "123456789", "address");
+        Client client = new Client("code2", "test", "test", LocalDate.of(2023, 10, 11), "123456789", "address");
+        client.setEmployee(new EmployeeDAOImpl().findByRegistrationNbr(3).get());
+        client.setAgency(new AgencyDAOImpl().findByCode("AGENCY1").get());
         Optional<Client> tmp1 = new ClientDAOImpl().create(client);
         tmp1.ifPresent((clt)->{
             Account tmp = new Account(0, 12345.23, LocalDate.of(2023, 10, 11), AccountStatus.ACTIVE, clt);
+            tmp.setAgency(client.getAgency());
             Optional<Account> optionalAcc = new AccountDAOImpl().createAccount(tmp);
             optionalAcc.ifPresent((acc)->{
                 Assertions.assertNotNull(acc);

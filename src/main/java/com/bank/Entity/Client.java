@@ -38,4 +38,12 @@ public class Client extends Person{
     public void setEmployee(Employee employee) {
         this.employee = employee;
     }
+
+    public Agency getAgency() {
+        return agency;
+    }
+
+    public void setAgency(Agency agency) {
+        this.agency = agency;
+    }
 }
