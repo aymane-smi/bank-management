@@ -1,5 +1,6 @@
 package com.bank.Service;
 
+import com.bank.DAO.AgencyDAOImpl;
 import com.bank.DAO.EmployeeDAOImpl;
 import com.bank.Entity.Employee;
 
@@ -38,6 +39,8 @@ public class EmployeeService {
             System.out.print("date de recrutement(aaaa-mm-jj):");
             tmp_date = sc.nextLine();
             emp.setDateOfRecrutment(LocalDate.parse(tmp_date, formatter));
+            System.out.print("agence code");
+            emp.setAgency(new AgencyDAOImpl().findByCode(sc.nextLine()).get());
             Optional<Employee> optionalEmp = EmployeeDao.create(emp);
             optionalEmp.ifPresent(val->System.out.println(String.format("*****   AJOUT D'UNEMPLOI AVEC ID[%d]   *****", val.getRegistrationNbr())));
         }catch(Exception e){
@@ -56,20 +59,11 @@ public class EmployeeService {
         }
     }
 
-    public void findEmployee(){
-        try{
-            Scanner sc = new Scanner(System.in);
-            System.out.print("id:");
-            Optional<Employee> emp = EmployeeDao.findByRegistrationNbr(sc.nextInt());
-            if(!emp.isPresent())
-                System.out.println(String.format("*****   EMPLOYEE INEXISTANT   *****"));
-            else
-                emp.ifPresent(e->{
-                    System.out.println(String.format("*****   MATRICULE[%d] NOM[%s] PRENOM[%s] DATE_NAISSANCE[%s] TELE[%s] ADRESSE[%s] DATE_RECRUTEMENT[%s]   *****", e.getRegistrationNbr(), e.getFirstName(), e.getLastName(), e.getBirthDay().toString(), e.getPhone(), e.getAddress(), e.getDateOfRecrutment().toString()));
-                });
-        }catch(Exception e){
-            System.out.println(e.getClass()+"::"+e.getMessage());
-        }
+    public Employee findEmployee(int registrationNbr) throws Exception{
+        if(registrationNbr == 0)
+            throw new Exception("***** EMPLOYEE MATRICULE NE PEUT PAS ETRE 0");
+        Optional<Employee> emp = EmployeeDao.findByRegistrationNbr(registrationNbr);
+        return emp.get();
     }
 
     public void updateEmployee(){
@@ -110,7 +104,7 @@ public class EmployeeService {
             if(!tmp_date.isEmpty()){
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 emp.setDateOfRecrutment(LocalDate.parse(tmp_date, formatter));
-                Optional<Employee> optionalEmp = EmployeeDao.create(emp);
+                Optional<Employee> optionalEmp = EmployeeDao.create(emp, LocalDate.parse(tmp_date, formatter));
                 optionalEmp.ifPresent(val->System.out.println(String.format("*****   AJOUT D'UNEMPLOI AVEC ID[%d]   *****", val.getRegistrationNbr())));
             }
             EmployeeDao.update(emp);
@@ -164,6 +158,12 @@ public class EmployeeService {
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
+    }
+
+    public Employee changeAgency(Employee emp, String agencyCode) throws Exception{
+        if(emp == null || emp.getAgency() == null)
+            throw new Exception("*****   L'AGENCE/EMPLOYEE NE PEUT PAS ETRE NULL OU CODE D'AGENCE EST VIDE   *****");
+        return EmployeeDao.changeAgency(emp, agencyCode).get();
     }
 
 }

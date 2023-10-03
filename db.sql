@@ -7,6 +7,17 @@ DROP TABLE IF EXISTS operation;
 DROP TABLE IF EXISTS mission_employee;
 DROP TABLE IF EXISTS account;
 
+-- SEQUENCES
+CREATE SEQUENCE agency_seq START 1;
+CREATE SEQUENCE employee_history_seq START 1;
+
+CREATE TABLE agency(
+    code VARCHAR(9) DEFAULT ('AGENCY' || nextval('agency_seq')::text) PRIMARY KEY,
+    name TEXT NOT NULL,
+    address TEXT NOT NULL,
+    phone TEXT NOT NULL
+);
+
 CREATE TABLE client(
       code TEXT PRIMARY KEY,
       firstName TEXT NOT NULL,
@@ -15,7 +26,9 @@ CREATE TABLE client(
       phone TEXT NOT NULL,
       address TEXT NOT NULL,
       employee_registrationNbr INT,
-      FOREIGN KEY(employee_registrationNbr) REFERENCES employee(registrationNbr)
+      agency_code VARCHAR(9) NOT NULL,
+      FOREIGN KEY(employee_registrationNbr) REFERENCES employee(registrationNbr) ON DELETE CASCADE,
+      FOREIGN KEY(agency_code) REFERENCES agency(code) ON DELETE CASCADE
 );
 
 CREATE TABLE employee(
@@ -25,7 +38,9 @@ CREATE TABLE employee(
       birthDay Date NOT NULL,
       phone TEXT NOT NULL,
       address TEXT NOT NULL,
-      dateOfRecrutment DATE NOT NULL
+      dateOfRecrutment DATE NOT NULL,
+      agency_code VARCHAR(9) NOT NULL,
+      FOREIGN KEY(agency_code) REFERENCES agency(code) ON DELETE CASCADE
 );
 
 CREATE TABLE mission(
@@ -40,21 +55,21 @@ CREATE TABLE account(
       creationDate Date NOT NULL,
       status Text NOT NULL CHECK IN ("ACTIVE", "SUSPEND", "BANNED"),
       client_code TEXT NOT NULL,
-      FOREIGN KEY (client_code) REFERENCES client(code)
+      FOREIGN KEY (client_code) REFERENCES client(code) ON DELETE CASCADE
 );
 
 CREATE TABLE current_account(
       code Text PRIMARY KEY,
       account_number INT NOT NULL,
       overDraft NUMERIC(10, 4) NOT NULL,
-      FOREIGN KEY (account_number) REFERENCES account(number)
+      FOREIGN KEY (account_number) REFERENCES account(number) ON DELETE CASCADE
 );
 
 CREATE TABLE saving_account(
       code Text PRIMARY KEY,
       account_number INT NOT NULL,
       tax NUMERIC(4, 2) NOT NULL,
-      FOREIGN KEY (account_number) REFERENCES account(number)
+      FOREIGN KEY (account_number) REFERENCES account(number) ON DELETE CASCADE
 );
 
 CREATE TABLE operation(
@@ -64,8 +79,8 @@ CREATE TABLE operation(
       type TEXT NOT NULL,
       account_number INT NOT NULL,
       employee_registrationNbr INT NOT NULL,
-      FOREIGN KEY (account_number) REFERENCES account(number),
-      FOREIGN KEY (employee_registrationNbr) REFERENCES employee(registrationNbr)
+      FOREIGN KEY (account_number) REFERENCES account(number) ON DELETE CASCADE,
+      FOREIGN KEY (employee_registrationNbr) REFERENCES employee(registrationNbr) ON DELETE CASCADE
 );
 
 CREATE TABLE mission_employee(
@@ -74,37 +89,30 @@ CREATE TABLE mission_employee(
     employee_registrationNbr INT NOT NULL,
     startDate Date NOT NULL,
     endDate Date DEFAULT NULL,
-    FOREIGN KEY (mission_code) REFERENCES mission(code),
-    FOREIGN KEY (employee_registrationNbr) REFERENCES employee(registrationNbr)
-);
-
-CREATE TABLE agency(
-    code Text PRIMARY KEY,
-    name TEXT NOT NULL,
-    address TEXT NOT NULL,
-    phone TEXT NOT NULL
+    FOREIGN KEY (mission_code) REFERENCES mission(code) ON DELETE CASCADE,
+    FOREIGN KEY (employee_registrationNbr) REFERENCES employee(registrationNbr) ON DELETE CASCADE
 );
 
 CREATE TABLE payment(
     id SERIAL PRIMARY KEY,
     transaction_time TIMESTAMP NOT NULL,
+    balance NOT NULL NUMERIC(10,4),
     from_account INT NOT NULL,
     to_account INT NOT NULL,
     employee_registrationNbr INT NOT NULL,
-    FOREIGN KEY (from_account) REFERENCES account(number),
-    FOREIGN KEY (to_account) REFERENCES account(number),
-    FOREIGN KEY (employee_registrationNbr) REFERENCES employee(registrationNbr)
+    FOREIGN KEY (from_account) REFERENCES account(number) ON DELETE CASCADE,
+    FOREIGN KEY (to_account) REFERENCES account(number) ON DELETE CASCADE,
+    FOREIGN KEY (employee_registrationNbr) REFERENCES employee(registrationNbr) ON DELETE CASCADE
 );
 
 CREATE TABLE employee_history(
-    id TEXT PRIMARY KEY,
+    id VARCHAR(5) DEFAULT ('ID' || nextval('employee_history_seq')::text) PRIMARY KEY,,
     employee_registrationNbr INT NOT NULL,
     agency_code TEXT NOT NULL,
     transfer_date DATE NOT NULL,
-    FOREIGN KEY (employee_registrationNbr) REFERENCES employee(registrationNbr),
-    FOREIGN KEY (agency_code) REFERENCES agency(code)
+    FOREIGN KEY (employee_registrationNbr) REFERENCES employee(registrationNbr) ON DELETE CASCADE,
+    FOREIGN KEY (agency_code) REFERENCES agency(code) ON DELETE CASCADE
 );
--- SEQUENCES
 
 
 CREATE OR REPLACE FUNCTION getSavingAccounts() RETURNS TABLE (

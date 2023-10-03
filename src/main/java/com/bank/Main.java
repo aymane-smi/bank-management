@@ -4,17 +4,16 @@ import com.bank.Service.AccountService;
 import com.bank.Service.ClientService;
 import com.bank.Service.EmployeeService;
 import com.bank.Service.OperationService;
-import com.bank.vue.AssertionVUE;
-import com.bank.vue.MissionVUE;
+import com.bank.vue.*;
 
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         EmployeeService employeeService = new EmployeeService();
-        ClientService clientService = new ClientService();
-        AccountService accountService = new AccountService(); // Ajout de la nouvelle classe AccountService
-        OperationService operationService = new OperationService();
+        ClientVUE clientVue = new ClientVUE();
+        AccountVUE accountVue = new AccountVUE(); // Ajout de la nouvelle classe AccountService.java
+        OperationVUE operationVue = new OperationVUE();
         MissionVUE missionVue = new MissionVUE();
         AssertionVUE assertionVue = new AssertionVUE();
         Scanner scanner = new Scanner(System.in);
@@ -43,15 +42,15 @@ public class Main {
                     break;
                 case 2:
                     // Menu pour gérer les clients
-                    handleClientMenu(clientService);
+                    handleClientMenu(clientVue);
                     break;
                 case 3:
                     // Menu pour gérer les comptes
-                    handleAccountMenu(accountService);
+                    handleAccountMenu(accountVue);
                     break;
                 case 4:
                     // Menu pour gérer les comptes
-                    handleOperationMenu(operationService);
+                    handleOperationMenu(operationVue);
                     break;
                 case 5:
                     handleMissionMenu(missionVue);
@@ -116,7 +115,7 @@ public class Main {
     }
 
     // Méthode pour gérer le menu des clients
-    private static void handleClientMenu(ClientService clientService) {
+    private static void handleClientMenu(ClientVUE clientVue) {
         Scanner scanner = new Scanner(System.in);
         int choice;
 
@@ -139,25 +138,25 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    clientService.addClient();
+                    clientVue.addClient();
                     break;
                 case 2:
-                    clientService.deleteClient();
+                    clientVue.deleteClient();
                     break;
                 case 3:
-                    clientService.findClientByCode();
+                    clientVue.findClientByCode();
                     break;
                 case 4:
-                    clientService.updateClient();
+                    clientVue.updateClient();
                     break;
                 case 5:
-                    clientService.findClientByAttribute();
+                    clientVue.findClientByAttribute();
                     break;
                 case 6:
-                    clientService.getClientAccount();
+                    clientVue.getClientAccount();
                     break;
                 case 7:
-                    clientService.findAllClients();
+                    clientVue.findAllClients();
                     break;
                 case 0:
                     System.out.println("Retour au menu principal.");
@@ -167,7 +166,7 @@ public class Main {
             }
         } while (choice != 0);
     }
-    private static void handleAccountMenu(AccountService accountService) {
+    private static void handleAccountMenu(AccountVUE accountVue) {
         Scanner scanner = new Scanner(System.in);
         int choice;
 
@@ -196,10 +195,10 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    accountService.addSavingWithAccount();
+                    accountVue.addSaving();
                     break;
                 case 2:
-                    accountService.addCurrentWithAccount();
+                    accountVue.addCurrent();
                     break;
 //                case 3:
 //                    accountService.addSavingWithoutAccount();
@@ -211,28 +210,28 @@ public class Main {
 //                    accountService.deleteAccount();
 //                    break;
                 case 3:
-                    accountService.deleteSavingAccount();
+                    accountVue.deleteSaving();
                     break;
                 case 4:
-                    accountService.deleteCurrentAccount();
+                    accountVue.deleteCurrent();
                     break;
                 case 5:
-                    accountService.updateStatusAccount();
+                    accountVue.updateAccountStatus();
                     break;
                 case 6:
-                    accountService.getAllAccount();
+                    accountVue.getAllAccount();
                     break;
                 case 7:
-                    accountService.updateSavingAccount();
+                    accountVue.updateSavingAccount();
                     break;
                 case 8:
-                    accountService.updateCurrentAccount();
+                    accountVue.updateCurrentAccount();
                     break;
                 case 9:
-                    accountService.getAccountStatus();
+                    accountVue.getAccountStatus();
                     break;
                 case 10:
-                    accountService.getAccountByDate();
+                    accountVue.getAccountByDate();
                     break;
                 case 0:
                     System.out.println("Retour au menu principal.");
@@ -243,7 +242,7 @@ public class Main {
         } while (choice != 0);
     }
 
-    private static void handleOperationMenu(OperationService operationService) {
+    private static void handleOperationMenu(OperationVUE operationVue) {
         Scanner scanner = new Scanner(System.in);
         int choice;
 
@@ -262,13 +261,13 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    operationService.createOperation();
+                    operationVue.createOperation();
                     break;
                 case 2:
-                    operationService.deleteOperation();
+                    operationVue.deleteOperation();
                     break;
                 case 3:
-                    operationService.findOperation();
+                    operationVue.findOperation();
                     break;
                 case 0:
                     System.out.println("Retour au menu principal.");

@@ -10,7 +10,8 @@ public class Account {
     protected LocalDate creationDate;
     protected AccountStatus status;
     protected Client client;
-    protected Account(){}
+    protected Agency agency;
+    public Account(){}
 
     public Account(int number, double balance, LocalDate creationDate, AccountStatus status, Client client) {
         this.number = number;
@@ -66,5 +67,13 @@ public class Account {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public Agency getAgency() {
+        return agency;
+    }
+
+    public void setAgency(Agency agency) {
+        this.agency = agency;
     }
 }
