@@ -1,5 +1,6 @@
 package com.bank.Service;
 
+import com.bank.DAO.AgencyDAOImpl;
 import com.bank.DAO.EmployeeDAOImpl;
 import com.bank.Entity.Employee;
 
@@ -38,6 +39,8 @@ public class EmployeeService {
             System.out.print("date de recrutement(aaaa-mm-jj):");
             tmp_date = sc.nextLine();
             emp.setDateOfRecrutment(LocalDate.parse(tmp_date, formatter));
+            System.out.print("agence code");
+            emp.setAgency(new AgencyDAOImpl().findByCode(sc.nextLine()).get());
             Optional<Employee> optionalEmp = EmployeeDao.create(emp);
             optionalEmp.ifPresent(val->System.out.println(String.format("*****   AJOUT D'UNEMPLOI AVEC ID[%d]   *****", val.getRegistrationNbr())));
         }catch(Exception e){

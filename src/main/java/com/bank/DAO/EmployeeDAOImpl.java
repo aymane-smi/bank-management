@@ -21,7 +21,7 @@ public class EmployeeDAOImpl implements EmployeeDAO{
         try{
             if(employee == null)
                 throw new Exception("*****   Impossible d'ajouter un employee vide   *****");
-            String query = "INSERT INTO employee(firstName, lastName, birthDay, phone, address, dateOfRecrutment) VALUES(?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO employee(firstName, lastName, birthDay, phone, address, dateOfRecrutment, agency_code) VALUES(?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, employee.getFirstName());
             stmt.setString(2, employee.getLastName());
@@ -29,6 +29,7 @@ public class EmployeeDAOImpl implements EmployeeDAO{
             stmt.setString(4, employee.getPhone());
             stmt.setString(5, employee.getAddress());
             stmt.setDate(6, java.sql.Date.valueOf(employee.getDateOfRecrutment()));
+            stmt.setString(7, employee.getAgency().getCode());
             int affectedRows = stmt.executeUpdate();
             if(affectedRows == 0)
                 throw new InsertionException();
