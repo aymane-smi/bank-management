@@ -27,12 +27,13 @@ public class AccountDAOImpl implements AccountDAO{
         try{
             if(account == null)
                 throw new Exception("*****   Impossible d'ajouter un compte vide   *****");
-            String query = "INSERT INTO account(balance, creationDate, status, client_code) VALUES(?, ?, ?, ?)";
+            String query = "INSERT INTO account(balance, creationDate, status, client_code, agency_code) VALUES(?, ?, ?, ?, agency_code)";
             PreparedStatement stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             stmt.setDouble(1, account.getBalance());
             stmt.setDate(2, java.sql.Date.valueOf(account.getCreationDate()));
             stmt.setString(3, account.getStatus().name());
             stmt.setString(4, account.getClient().getCode());
+            stmt.setString(5, account.getAgency().getCode());
             int affectedRows = stmt.executeUpdate();
             if(affectedRows == 0)
                 throw new InsertionException();

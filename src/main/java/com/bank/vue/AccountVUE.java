@@ -1,13 +1,12 @@
 package com.bank.vue;
 
 import com.bank.DAO.AccountDAOImpl;
+import com.bank.DAO.AgencyDAOImpl;
 import com.bank.DAO.ClientDAOImpl;
-import com.bank.Entity.Account;
-import com.bank.Entity.Client;
-import com.bank.Entity.CurrentAccount;
-import com.bank.Entity.SavingAccount;
+import com.bank.Entity.*;
 import com.bank.Enum.AccountStatus;
 import com.bank.Service.AccountService;
+import com.bank.Service.AgencyService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -16,8 +15,10 @@ import java.util.Scanner;
 
 public class AccountVUE {
     private AccountService accountService;
-    public AccountVUE(){
-        accountService = new AccountService();
+    private AgencyDAOImpl agencyDAOImpl;
+    public AccountVUE(AgencyDAOImpl agencyDAOImpl, AccountService accountService){
+        this.accountService = accountService;
+        this.agencyDAOImpl = agencyDAOImpl;
     }
 
     public void addSaving(){
@@ -50,6 +51,9 @@ public class AccountVUE {
         sc.nextLine();
         System.out.println("code du client:");
         Optional<Client> optionalClt = new ClientDAOImpl().findByCode(sc.nextLine());
+        System.out.print("code d'agence:");
+        Agency agency = agencyDAOImpl.findByCode(sc.nextLine()).get();
+        account.setAgency(agency);
         if(optionalClt.isPresent()){
             System.out.println("code:");
             String code = sc.nextLine();
