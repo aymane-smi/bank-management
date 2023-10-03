@@ -2,15 +2,19 @@ package com.bank.Service;
 
 import com.bank.DAO.AgencyDAO;
 import com.bank.DAO.AgencyDAOImpl;
+import com.bank.DAO.AgencyEmployeeDAOImpl;
 import com.bank.Entity.Agency;
+import com.bank.Entity.AgencyEmployee;
 
 import java.util.List;
 import java.util.Optional;
 
 public class AgencyService {
     private AgencyDAOImpl agencyDao;
-    public AgencyService(AgencyDAOImpl agencyDAO){
+    private AgencyEmployeeDAOImpl agencyEmployeeDao;
+    public AgencyService(AgencyDAOImpl agencyDAO, AgencyEmployeeDAOImpl agencyEmployee){
         this.agencyDao = agencyDAO;
+        this.agencyEmployeeDao = agencyEmployeeDao;
     }
 
     public void create(Agency agency){
@@ -60,5 +64,9 @@ public class AgencyService {
         if(address == "")
             throw new Exception("*****   L'ADRESSE D'AGENCE NE PAS ETRE VIDE   *****");
         return agencyDao.findByAddress(address).get();
+    }
+
+    public List<AgencyEmployee> findHistory(){
+        return agencyEmployeeDao.find();
     }
 }

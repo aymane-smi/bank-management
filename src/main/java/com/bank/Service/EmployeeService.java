@@ -104,7 +104,7 @@ public class EmployeeService {
             if(!tmp_date.isEmpty()){
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 emp.setDateOfRecrutment(LocalDate.parse(tmp_date, formatter));
-                Optional<Employee> optionalEmp = EmployeeDao.create(emp);
+                Optional<Employee> optionalEmp = EmployeeDao.create(emp, LocalDate.parse(tmp_date, formatter));
                 optionalEmp.ifPresent(val->System.out.println(String.format("*****   AJOUT D'UNEMPLOI AVEC ID[%d]   *****", val.getRegistrationNbr())));
             }
             EmployeeDao.update(emp);

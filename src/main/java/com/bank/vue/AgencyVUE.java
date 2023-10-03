@@ -2,6 +2,7 @@ package com.bank.vue;
 
 import com.bank.DAO.AgencyDAOImpl;
 import com.bank.Entity.Agency;
+import com.bank.Entity.AgencyEmployee;
 import com.bank.Service.AgencyService;
 import com.bank.Service.EmployeeService;
 
@@ -11,13 +12,14 @@ public class AgencyVUE {
     private AgencyService agencyService;
     private EmployeeService employeeService;
     private AgencyDAOImpl agencyDAO;
-    public AgencyVUE(AgencyService agencyService, AgencyDAOImpl agencyDAO, EmployeeService employeeService){
+    private Scanner sc;
+    public AgencyVUE(AgencyService agencyService, AgencyDAOImpl agencyDAO, EmployeeService employeeService, Scanner sc){
         this.agencyService = agencyService;
         this.agencyDAO = agencyDAO;
+        this.sc = sc;
     }
 
     public void createAgency(){
-        Scanner sc = new Scanner(System.in);
         Agency agency = new Agency();
         System.out.print("name:");
         agency.setName(sc.nextLine());
@@ -30,12 +32,10 @@ public class AgencyVUE {
     }
 
     public void deleteAgency(){
-        Scanner sc = new Scanner(System.in);
         agencyService.delete(sc.nextLine());
     }
 
     public void updateAgency(){
-        Scanner sc = new Scanner(System.in);
         Agency agency;
         System.out.print("code:");
         String tmp = sc.nextLine();
@@ -68,7 +68,6 @@ public class AgencyVUE {
 
     public void findByAddress(){
         try{
-            Scanner sc = new Scanner(System.in);
             System.out.print("adresse:");
             Agency agency = agencyService.findByAddress(sc.nextLine());
             System.out.println(String.format("***** CODE[%s] NOME[%s] ADRESSE[%s] TELEPHONE[%s]", agency.getCode(), agency.getName(), agency.getAddress(), agency.getPhone()));
@@ -79,10 +78,21 @@ public class AgencyVUE {
 
     public void findByEmployee(){
         try{
-            Scanner sc = new Scanner(System.in);
             System.out.print("employee matricule:");
             Agency agency = employeeService.findEmployee(sc.nextInt()).getAgency();
             System.out.println(String.format("***** CODE[%s] NOME[%s] ADRESSE[%s] TELEPHONE[%s]", agency.getCode(), agency.getName(), agency.getAddress(), agency.getPhone()));
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+    }
+
+    public void findAllHistory(){
+        try{
+            for(AgencyEmployee tmp:agencyService.findHistory()){
+                System.out.println(String.format("\n\n***** CODE[%s] NOME[%s] ADRESSE[%s] TELEPHONE[%s]", tmp.getAgency().getCode(), tmp.getAgency().getName(), tmp.getAgency().getAddress(), tmp.getAgency().getPhone()));
+                System.out.println(String.format("*****   MATRICULE[%d] NOM[%s] PRENOM[%s] DATE_NAISSANCE[%s] TELE[%s] ADRESSE[%s] DATE_RECRUTEMENT[%s]   *****", tmp.getEmployee().getRegistrationNbr(), tmp.getEmployee().getFirstName(), tmp.getEmployee().getLastName(), tmp.getEmployee().getBirthDay().toString(), tmp.getEmployee().getPhone(), tmp.getEmployee().getAddress(), tmp.getEmployee().getDateOfRecrutment().toString()));
+                System.out.println(String.format("*****   DATE DE TRANSFER: %s\n", tmp.getTransfer_date()));
+            }
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
         }

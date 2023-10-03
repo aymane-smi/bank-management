@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS account;
 
 -- SEQUENCES
 CREATE SEQUENCE agency_seq START 1;
+CREATE SEQUENCE employee_history_seq START 1;
 
 CREATE TABLE agency(
     code VARCHAR(9) DEFAULT ('AGENCY' || nextval('agency_seq')::text) PRIMARY KEY,
@@ -105,7 +106,7 @@ CREATE TABLE payment(
 );
 
 CREATE TABLE employee_history(
-    id TEXT PRIMARY KEY,
+    id VARCHAR(5) DEFAULT ('ID' || nextval('employee_history_seq')::text) PRIMARY KEY,,
     employee_registrationNbr INT NOT NULL,
     agency_code TEXT NOT NULL,
     transfer_date DATE NOT NULL,

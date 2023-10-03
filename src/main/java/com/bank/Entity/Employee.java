@@ -16,6 +16,7 @@ public class Employee extends Person{
     private List<Client> createdClient = new ArrayList<>();
     private List<Operation> createdOperations = new ArrayList<>();
     private Agency agency;
+    private List<Agency> agencyHistory;
     public Employee(){}
 
     public Employee(String firstName, String lastName, LocalDate birthDay, String phone, String address, int registrationNbr, LocalDate dateOfRecrutment) {
@@ -70,5 +71,13 @@ public class Employee extends Person{
 
     public void setAgency(Agency agency) {
         this.agency = agency;
+    }
+
+    public List<Agency> getListAgencies() {
+        return agencyHistory;
+    }
+
+    public void setListAgencies(List<Agency> agencyHistory) {
+        this.agencyHistory = agencyHistory;
     }
 }

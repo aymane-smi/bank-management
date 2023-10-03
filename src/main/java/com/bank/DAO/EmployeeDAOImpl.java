@@ -7,6 +7,7 @@ import com.bank.Exception.DeleteException;
 import com.bank.Exception.InsertionException;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +18,7 @@ public class EmployeeDAOImpl implements EmployeeDAO{
         connection = JDBCConnection.getConnection();
     }
     @Override
-    public Optional<Employee> create(Employee employee) {
+    public Optional<Employee> create(Employee employee, LocalDate date) {
         try{
             if(employee == null)
                 throw new Exception("*****   Impossible d'ajouter un employee vide   *****");
@@ -38,6 +39,8 @@ public class EmployeeDAOImpl implements EmployeeDAO{
                 if (generatedKeys.next()) {
                     int generatedId = generatedKeys.getInt(1);
                     employee.setRegistrationNbr(generatedId);
+                    if(new AgencyEmployeeDAOImpl().create(employee.getRegistrationNbr(), employee.getAgency().getCode(), date) == false)
+                        throw new Exception("*****   EMPLOYEE CREER MAI SONT HISTORIQUE   *****");
                 }
                 return Optional.of(employee);
             }

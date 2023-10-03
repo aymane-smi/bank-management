@@ -22,4 +22,5 @@ public class Agency {
     private String phone;
     private List<Employee> employees = new ArrayList<>();
     private List<Client> clients = new ArrayList<>();
+    private List<Employee> employeeHistory = new ArrayList<>();
 }
