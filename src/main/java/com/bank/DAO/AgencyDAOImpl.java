@@ -121,4 +121,25 @@ public class AgencyDAOImpl implements AgencyDAO{
         }
         return Optional.empty();
     }
+
+    @Override
+    public Optional<Agency> findByAddress(String address) {
+        try{
+            if(address == "")
+                throw new Exception("*****   L'ADRESS DE L'AGENCE NE PEUT PAS ETRE VIDE   *****");
+            String query = "SELECT *  FROM agency WHERE address = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, address);
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                return Optional.of(
+                        new Agency(result.getString("code"), result.getString("name"), result.getString("address"), result.getString("phone"))
+                );
+            }
+            return Optional.empty();
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
 }

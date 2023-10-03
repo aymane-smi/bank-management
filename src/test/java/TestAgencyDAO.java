@@ -39,4 +39,12 @@ public class TestAgencyDAO {
             Assertions.assertEquals(0, list.size());
         });
     }
+
+    @Test
+    public void testFindByAddress(){
+        Optional<Agency> optionalAgency = new AgencyDAOImpl().findByAddress("AGENCY3");
+        optionalAgency.ifPresent((obj)->{
+            Assertions.assertEquals("AGENCY3", obj.getCode());
+        });
+    }
 }

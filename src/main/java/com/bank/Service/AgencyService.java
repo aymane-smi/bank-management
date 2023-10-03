@@ -55,4 +55,10 @@ public class AgencyService {
         Optional<List<Agency>> optionalAgency = agencyDao.find();
         return optionalAgency.get();
     }
+
+    public Agency findByAddress(String address) throws Exception {
+        if(address == "")
+            throw new Exception("*****   L'ADRESSE D'AGENCE NE PAS ETRE VIDE   *****");
+        return agencyDao.findByAddress(address).get();
+    }
 }

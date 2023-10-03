@@ -63,4 +63,15 @@ public class AgencyVUE {
         for(Agency agency: agencyService.find())
             System.out.println(String.format("***** CODE[%s] NOME[%s] ADRESSE[%s] TELEPHONE[%s]", agency.getCode(), agency.getName(), agency.getAddress(), agency.getPhone()));
     }
+
+    public void findByAddress(){
+        try{
+            Scanner sc = new Scanner(System.in);
+            System.out.print("adresse:");
+            Agency agency = agencyService.findByAddress(sc.nextLine());
+            System.out.println(String.format("***** CODE[%s] NOME[%s] ADRESSE[%s] TELEPHONE[%s]", agency.getCode(), agency.getName(), agency.getAddress(), agency.getPhone()));
+        }catch(Exception e){
+
+        }
+    }
 }
