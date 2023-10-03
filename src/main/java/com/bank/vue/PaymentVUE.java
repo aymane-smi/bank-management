@@ -7,7 +7,10 @@ import com.bank.Entity.Employee;
 import com.bank.Entity.Payment;
 import com.bank.Service.PaymentService;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Scanner;
 
 public class PaymentVUE {
@@ -51,6 +54,19 @@ public class PaymentVUE {
             System.out.print("id de virment:");
             if(paymentService.delete(sc.nextInt()) == 1)
                 System.out.println("*****   VIRMENT SUPPRIMER AVEC SUCCESS   *****");
+        }catch (Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+    }
+
+    public void findPaymentByDate(){
+        try {
+            System.out.print("date de virmenet(yyyy-MM-dd):");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate inputDate = LocalDate.parse(sc.nextLine(), formatter);
+            List<Payment> paymentList = paymentService.findByDate(inputDate);
+            for(Payment payment:paymentList)
+                System.out.println(String.format("*****   ID[%d] MONTANT[%f] TEMPS[%s] EMPLOYEE_ID[%d] DONNEUR[%d] BENEFICIER[%d]   *****", payment.getId(), payment.getBalance(),payment.getTransaction_time(), payment.getEmployee().getRegistrationNbr(), payment.getFrom().getNumber(), payment.getFrom().getNumber()));
         }catch (Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
         }

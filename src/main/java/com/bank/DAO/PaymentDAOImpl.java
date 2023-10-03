@@ -5,6 +5,10 @@ import com.bank.Entity.Payment;
 import com.bank.Exception.InsertionException;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class PaymentDAOImpl implements PaymentDAO{
@@ -58,5 +62,33 @@ public class PaymentDAOImpl implements PaymentDAO{
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
         return 0;
+    }
+
+    @Override
+    public List<Payment> findByDate(LocalDate date) {
+        List<Payment> list = new ArrayList<>();
+        try{
+            if(date == null)
+                throw new Exception("*****   LA DATE DOIT ETRE NON NULLE   *****");
+            String query = "SELECT * FROM payment WHERE DATE(transaction_time) = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setDate(1, java.sql.Date.valueOf(date));
+            ResultSet results = stmt.executeQuery();
+            while(results.next()){
+                Payment payment = new Payment(
+                        results.getInt("id"),
+                        results.getDouble("balance"),
+                        new AccountDAOImpl().findAccountByNbr(results.getInt("from_account")).get(),
+                        new AccountDAOImpl().findAccountByNbr(results.getInt("to_account")).get(),
+                        new EmployeeDAOImpl().findByRegistrationNbr(results.getInt("employee_registrationnbr")).get(),
+                        results.getTimestamp("transaction_time").toLocalDateTime()
+                );
+                list.add(payment);
+            }
+            return list;
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return list;
     }
 }

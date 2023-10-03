@@ -8,7 +8,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.text.html.Option;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public class TestPaymentDAO {
@@ -28,5 +30,11 @@ public class TestPaymentDAO {
     public void testDelete(){
         int result = new PaymentDAOImpl().delete(1);
         Assertions.assertEquals(1, result);
+    }
+
+    @Test
+    public void testFindByDate(){
+        List<Payment> paymentList = new PaymentDAOImpl().findByDate(LocalDate.now());
+        Assertions.assertEquals(0, paymentList.size());
     }
 }
