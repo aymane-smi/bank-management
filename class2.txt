@@ -23,11 +23,10 @@ class Payment{
 
 class Credit{
   -number: int
-  -date: LocalDate
   -status: CreditStatus
   -balance: real
   -duration: LocalDate
-  -remarl: String
+  -remark: String
 }
 
 class Client extends Person{
@@ -84,8 +83,15 @@ enum TypeOperation {
   TRANSFER
 }
 
+enum CreditStatus {
+    PENDING
+    ACCEPTED
+    REFUSED
+}
+
 AccountStatus --+ Account
 TypeOperation --+ Operation
+CreditStatus --+ Credit
 
 Operation "*" -- "1" Employee : valider par
 Client *-- Account : Appartient
@@ -100,5 +106,6 @@ Payment "1" -- "1" Account: faire
 Payment "1" -- "1" Account: recevoir
 Credit "1" -- "*" Agence: fait dans
 Credit "*" -- "1" Client: demander
+Credit "*" -- "1" Employee: Valider
 
 @enduml
