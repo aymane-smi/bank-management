@@ -1,11 +1,14 @@
-DROP TABLE IF EXISTS client;
-DROP TABLE IF EXISTS employee;
-DROP TABLE IF EXISTS mission;
-DROP TABLE IF EXISTS current_account;
-DROP TABLE IF EXISTS saving_account;
-DROP TABLE IF EXISTS operation;
-DROP TABLE IF EXISTS mission_employee;
-DROP TABLE IF EXISTS account;
+DROP TABLE IF EXISTS client CASCADE;
+DROP TABLE IF EXISTS employee CASCADE;
+DROP TABLE IF EXISTS mission CASCADE;
+DROP TABLE IF EXISTS current_account CASCADE;
+DROP TABLE IF EXISTS saving_account CASCADE;
+DROP TABLE IF EXISTS operation CASCADE;
+DROP TABLE IF EXISTS mission_employee CASCADE;
+DROP TABLE IF EXISTS account CASCADE;
+DROP TABLE IF EXISTS agency CASCADE;
+DROP TABLE IF EXISTS payment CASCADE;
+DROP TABLE IF EXISTS employee_history CASCADE;
 
 -- SEQUENCES
 CREATE SEQUENCE agency_seq START 1;
@@ -16,6 +19,18 @@ CREATE TABLE agency(
     name TEXT NOT NULL,
     address TEXT NOT NULL,
     phone TEXT NOT NULL
+);
+
+CREATE TABLE employee(
+      registrationNbr SERIAL PRIMARY KEY,
+      firstName TEXT NOT NULL,
+      lastName TEXT NOT NULL,
+      birthDay Date NOT NULL,
+      phone TEXT NOT NULL,
+      address TEXT NOT NULL,
+      dateOfRecrutment DATE NOT NULL,
+      agency_code VARCHAR(9) NOT NULL,
+      FOREIGN KEY(agency_code) REFERENCES agency(code) ON DELETE CASCADE
 );
 
 CREATE TABLE client(
@@ -31,18 +46,6 @@ CREATE TABLE client(
       FOREIGN KEY(agency_code) REFERENCES agency(code) ON DELETE CASCADE
 );
 
-CREATE TABLE employee(
-      registrationNbr SERIAL PRIMARY KEY,
-      firstName TEXT NOT NULL,
-      lastName TEXT NOT NULL,
-      birthDay Date NOT NULL,
-      phone TEXT NOT NULL,
-      address TEXT NOT NULL,
-      dateOfRecrutment DATE NOT NULL,
-      agency_code VARCHAR(9) NOT NULL,
-      FOREIGN KEY(agency_code) REFERENCES agency(code) ON DELETE CASCADE
-);
-
 CREATE TABLE mission(
       code SERIAL PRIMARY KEY,
       name TEXT NOT NULL,
@@ -53,9 +56,11 @@ CREATE TABLE account(
       number SERIAL PRIMARY KEY,
       balance NUMERIC(10, 4) NOT NULL,
       creationDate Date NOT NULL,
-      status Text NOT NULL CHECK IN ("ACTIVE", "SUSPEND", "BANNED"),
+      status Text NOT NULL CHECK (status IN ('ACTIVE', 'SUSPEND', 'BANNED')),
       client_code TEXT NOT NULL,
-      FOREIGN KEY (client_code) REFERENCES client(code) ON DELETE CASCADE
+      agency_code TEXT NOT NULL,
+      FOREIGN KEY (client_code) REFERENCES client(code) ON DELETE CASCADE,
+      FOREIGN KEY (agency_code) REFERENCES agency(code) ON DELETE CASCADE
 );
 
 CREATE TABLE current_account(
@@ -96,7 +101,7 @@ CREATE TABLE mission_employee(
 CREATE TABLE payment(
     id SERIAL PRIMARY KEY,
     transaction_time TIMESTAMP NOT NULL,
-    balance NOT NULL NUMERIC(10,4),
+    balance NUMERIC(10,4) NOT NULL,
     from_account INT NOT NULL,
     to_account INT NOT NULL,
     employee_registrationNbr INT NOT NULL,
@@ -106,7 +111,7 @@ CREATE TABLE payment(
 );
 
 CREATE TABLE employee_history(
-    id VARCHAR(5) DEFAULT ('ID' || nextval('employee_history_seq')::text) PRIMARY KEY,,
+    id VARCHAR(5) DEFAULT ('ID' || nextval('employee_history_seq')::text) PRIMARY KEY,
     employee_registrationNbr INT NOT NULL,
     agency_code TEXT NOT NULL,
     transfer_date DATE NOT NULL,
@@ -178,7 +183,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION getClientCurrentStatus(status TEXT) RETURNS TABLE (
+CREATE OR REPLACE FUNCTION getClientCurrentStatus(current_status TEXT) RETURNS TABLE (
     balance NUMERIC(10, 4),
     creationDate DATE,
     Status TEXT,
@@ -195,7 +200,7 @@ BEGIN
     FROM
         current_account
     JOIN
-        account ON current_account.account_number = account.number WHERE account.status = getClientCurrentStatus.status;
+        account ON current_account.account_number = account.number WHERE account.status = getClientCurrentStatus.current_status;
 END;
 $$ LANGUAGE plpgsql;
 

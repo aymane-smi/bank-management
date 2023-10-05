@@ -27,7 +27,7 @@ public class AccountDAOImpl implements AccountDAO{
         try{
             if(account == null)
                 throw new Exception("*****   Impossible d'ajouter un compte vide   *****");
-            String query = "INSERT INTO account(balance, creationDate, status, client_code, agency_code) VALUES(?, ?, ?, ?, agency_code)";
+            String query = "INSERT INTO account(balance, creationDate, status, client_code, agency_code) VALUES(?, ?, ?, ?, ?)";
             PreparedStatement stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             stmt.setDouble(1, account.getBalance());
             stmt.setDate(2, java.sql.Date.valueOf(account.getCreationDate()));

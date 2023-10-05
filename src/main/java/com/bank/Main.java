@@ -9,7 +9,7 @@ import com.bank.vue.*;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         EmployeeService employeeService = new EmployeeService();
         ClientVUE clientVue = new ClientVUE();
         AccountVUE accountVue = new AccountVUE(); // Ajout de la nouvelle classe AccountService.java
@@ -347,4 +347,5 @@ public class Main {
             }
         } while (choice != 0);
     }
+}*/
 }

@@ -41,7 +41,7 @@ public class EmployeeService {
             emp.setDateOfRecrutment(LocalDate.parse(tmp_date, formatter));
             System.out.print("agence code");
             emp.setAgency(new AgencyDAOImpl().findByCode(sc.nextLine()).get());
-            Optional<Employee> optionalEmp = EmployeeDao.create(emp);
+            Optional<Employee> optionalEmp = EmployeeDao.create(emp, LocalDate.parse(tmp_date, formatter));
             optionalEmp.ifPresent(val->System.out.println(String.format("*****   AJOUT D'UNEMPLOI AVEC ID[%d]   *****", val.getRegistrationNbr())));
         }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());

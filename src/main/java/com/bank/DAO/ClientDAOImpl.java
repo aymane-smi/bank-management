@@ -26,8 +26,10 @@ public class ClientDAOImpl implements ClientDAO{
         try{
             if(client == null)
                 throw new Exception("*****   Impossible d'ajouter un client vide   *****");
-            String query = "INSERT INTO client(code, firstName, lastName, birthDay, phone, address, employee_registrationNbr) VALUES(?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO client(code, firstName, lastName, birthDay, phone, address, employee_registrationNbr, agency_code) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            System.out.println(client.getAgency() == null);
+            System.out.println(client.getEmployee() == null);
             stmt.setString(1, client.getCode());
             stmt.setString(2, client.getFirstName());
             stmt.setString(3, client.getLastName());
@@ -35,6 +37,7 @@ public class ClientDAOImpl implements ClientDAO{
             stmt.setString(5, client.getPhone());
             stmt.setString(6, client.getAddress());
             stmt.setInt(7, client.getEmployee().getRegistrationNbr());
+            stmt.setString(8, client.getAgency().getCode());
             int affectedRows = stmt.executeUpdate();
             if(affectedRows == 0)
                 throw new InsertionException();
