@@ -119,6 +119,20 @@ CREATE TABLE employee_history(
     FOREIGN KEY (agency_code) REFERENCES agency(code) ON DELETE CASCADE
 );
 
+CREATE TABLE CREDIT(
+    id SERIAL PRIMARY KEY,
+    client_code TEXT NOT NULL,
+    agency_code VARCHAR(9) NOT NULL,
+    employee_registrationNbr INT NOT NULL,
+    credit_value INT NOT NULL,
+    status TEXT CHECK (status IN ('PENDING', 'ACCEPTED', 'REFUSED')),
+    duration INT NOT NULL,
+    remark TEXT,
+    FOREIGN KEY(client_code) REFERENCES client(code),
+    FOREIGN KEY(agency_code) REFERENCES agency(code),
+    FOREIGN KEY(employee_registrationNbr) REFERENCES employee(registrationNbr)
+);
+
 
 CREATE OR REPLACE FUNCTION getSavingAccounts() RETURNS TABLE (
     balance NUMERIC(10, 4),
