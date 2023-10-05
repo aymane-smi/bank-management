@@ -1,18 +1,12 @@
 package com.bank.Service;
 
 import com.bank.DAO.ClientDAOImpl;
-import com.bank.DAO.EmployeeDAOImpl;
 import com.bank.Entity.Client;
 import com.bank.Entity.CurrentAccount;
-import com.bank.Entity.Employee;
 import com.bank.Entity.SavingAccount;
 
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-import java.util.Scanner;
 
 public class ClientService {
     private ClientDAOImpl ClientDao;
@@ -41,11 +35,12 @@ public class ClientService {
         }
     }
 
-    public void findClientByCode(String code){
+    public Client findClientByCode(String code){
             Optional<Client> Clt= ClientDao.findByCode(code);
             Clt.ifPresent((clt)->{
                 System.out.println(String.format("*****   CODE[%s] NOM[%s] PRENOM[%s] DATE_NAISSANCE[%s] TELE[%s] ADRESSE[%s] EMPLOYEE_REGISTRATION[%d]   *****", clt.getCode(), clt.getFirstName(), clt.getLastName(), clt.getBirthDay().toString(), clt.getPhone(), clt.getAddress(), clt.getEmployee().getRegistrationNbr()));
             });
+        return Clt.get();
     }
 
     public void updateClient(Client clt){
