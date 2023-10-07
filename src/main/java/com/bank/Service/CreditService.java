@@ -2,6 +2,7 @@ package com.bank.Service;
 
 import com.bank.DAO.CreditDAOImpl;
 import com.bank.Entity.Credit;
+import com.bank.Enum.CreditStatus;
 
 public class CreditService {
     private CreditDAOImpl creditDao;
@@ -27,5 +28,11 @@ public class CreditService {
         if(id <= 0)
             throw new Exception("*****   ID INVALIDE   *****");
         return creditDao.delete(id);
+    }
+
+    public Credit updateStatus(int id, CreditStatus status)throws Exception{
+        if(id <= 0 || status == null)
+            throw new Exception("*****   STATUS|ID EST INVALIDE    *****");
+        return creditDao.updateStatus(id, status).get();
     }
 }

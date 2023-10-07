@@ -2,6 +2,7 @@ package com.bank.DAO;
 
 import com.bank.Connection.JDBCConnection;
 import com.bank.Entity.Credit;
+import com.bank.Enum.CreditStatus;
 import com.bank.Exception.InsertionException;
 
 import java.sql.Connection;
@@ -62,5 +63,49 @@ public class CreditDAOImpl implements CreditDAO{
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
         return 0;
+    }
+
+    @Override
+    public Optional<Credit> updateStatus(int id, CreditStatus status) {
+        try{
+            if(id <=0 || status == null)
+                throw new Exception("*****   STATUS|ID EST INVALIDE    *****");
+            String query = "UPDATE credit SET status = ? WHERE id = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, id);
+            stmt.setString(2, status.name());
+            stmt.executeUpdate();
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Credit> findById(int id){
+        try{
+            if(id <=0)
+                throw new Exception("*****   ID EST INVALIDE    *****");
+            String query = "SELECT * FROM credit WHERE id = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, id);
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                Credit credit = new Credit();
+                credit.setId(result.getInt("id"));
+                credit.setValue(result.getInt("credit_value"));
+                credit.setDuration(result.getInt("duration"));
+                credit.setRemark(result.getString("remark"));
+                credit.setAgency(new AgencyDAOImpl().findByCode(result.getString("agency_code")).get());
+                credit.setEmployee(new EmployeeDAOImpl().findByRegistrationNbr(result.getInt("employee_registrationNbr")).get());
+                credit.setClient(new ClientDAOImpl().findByCode(result.getString("client_code")).get());
+                credit.setStatus(CreditStatus.valueOf(result.getString("status")));
+                return Optional.of(credit);
+            }
+            return Optional.empty();
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return Optional.empty();
     }
 }

@@ -56,12 +56,25 @@ public class CreditVUE {
     }
 
     public void deleteCredit(){
-        System.out.println("id du credit:");
+        System.out.print("id du credit:");
         int id = sc.nextInt();
         try {
             if (creditService.deletecredit(id) == 1)
                 System.out.println("*****   CREDIT SUPPRIMER   *****");
         }catch (Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+    }
+
+    public void updateStatus(){
+        System.out.print("id du credit:");
+        int id = sc.nextInt();
+        System.out.print("operation(PENDING|ACCEPTED|REFUSED):");
+        CreditStatus status = CreditStatus.valueOf(sc.nextLine());
+        try{
+            if(creditService.updateStatus(id, status) != null)
+                System.out.println("*****   STATUS CHQNGER AVEC SUCCESS   *****");
+        }catch(Exception e){
             System.out.println(e.getClass()+"::"+e.getMessage());
         }
     }
