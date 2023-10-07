@@ -45,4 +45,22 @@ public class CreditDAOImpl implements CreditDAO{
         }
         return Optional.empty();
     }
+
+    @Override
+    public int delete(int id) {
+        try{
+            if(id == 0)
+                throw new Exception("*****   ID DU CREDIT NE PEUT PAS ETRE 0   *****");
+            String query = "DELETE FROM credit WHERE id = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            int affectedRows = stmt.executeUpdate();
+            if(affectedRows == 0)
+                return 0;
+            else
+                return affectedRows;
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+        return 0;
+    }
 }

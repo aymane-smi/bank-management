@@ -22,4 +22,10 @@ public class CreditService {
             throw new Exception("***** LE CREDIT NE PEUT PAS ETRE VIDE   *****");
         return creditDao.create(credit).get();
     }
+
+    public int deletecredit(int id) throws Exception{
+        if(id <= 0)
+            throw new Exception("*****   ID INVALIDE   *****");
+        return creditDao.delete(id);
+    }
 }

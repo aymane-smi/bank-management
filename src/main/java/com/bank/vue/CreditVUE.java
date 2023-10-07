@@ -55,4 +55,15 @@ public class CreditVUE {
         }
     }
 
+    public void deleteCredit(){
+        System.out.println("id du credit:");
+        int id = sc.nextInt();
+        try {
+            if (creditService.deletecredit(id) == 1)
+                System.out.println("*****   CREDIT SUPPRIMER   *****");
+        }catch (Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+    }
+
 }

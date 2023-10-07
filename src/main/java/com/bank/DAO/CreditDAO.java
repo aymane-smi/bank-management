@@ -6,4 +6,5 @@ import java.util.Optional;
 
 public interface CreditDAO {
     public Optional<Credit> create(Credit credit);
+    public int delete(int id);
 }
