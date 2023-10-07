@@ -35,4 +35,10 @@ public class CreditService {
             throw new Exception("*****   STATUS|ID EST INVALIDE    *****");
         return creditDao.updateStatus(id, status).get();
     }
+
+    public Credit findById(int id)throws Exception{
+        if(id <= 0)
+            throw new Exception("*****   ID EST INVALIDE    *****");
+        return creditDao.findById(id).get();
+    }
 }
