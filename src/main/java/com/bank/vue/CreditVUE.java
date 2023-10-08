@@ -55,4 +55,39 @@ public class CreditVUE {
         }
     }
 
+    public void deleteCredit(){
+        System.out.print("id du credit:");
+        int id = sc.nextInt();
+        try {
+            if (creditService.deletecredit(id) == 1)
+                System.out.println("*****   CREDIT SUPPRIMER   *****");
+        }catch (Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+    }
+
+    public void updateStatus(){
+        System.out.print("id du credit:");
+        int id = sc.nextInt();
+        System.out.print("operation(PENDING|ACCEPTED|REFUSED):");
+        CreditStatus status = CreditStatus.valueOf(sc.nextLine());
+        try{
+            if(creditService.updateStatus(id, status) != null)
+                System.out.println("*****   STATUS CHANGER AVEC SUCCESS   *****");
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+    }
+    public void findById(){
+        System.out.print("id du credit:");
+        int id = sc.nextInt();
+        try{
+            credit = creditService.findById(id);
+            if(credit != null)
+                System.out.println(String.format("***** ID[%d] MONTANT[%d] STATUS[%s] REMARK[%s] AGENCE_CODE[%s] EMPLOYEE_MATRICULE[%d] CLIENT_CODE[%s]", credit.getId(), credit.getValue(), credit.getStatus().name(), credit.getRemark(), credit.getAgency().getCode(), credit.getEmployee().getRegistrationNbr(), credit.getClient().getCode()));
+        }catch(Exception e){
+            System.out.println(e.getClass()+"::"+e.getMessage());
+        }
+    }
+
 }
