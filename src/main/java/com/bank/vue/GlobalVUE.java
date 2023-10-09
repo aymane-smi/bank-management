@@ -6,18 +6,19 @@ import java.util.Scanner;
 
 public class GlobalVUE {
     // Méthode pour gérer le menu des employés
-    public static void handleEmployeeMenu(EmployeeService employeeService) {
+    public static void handleEmployeeMenu(EmployeeVUE employeeVue) {
         Scanner scanner = new Scanner(System.in);
         int choice;
 
         do {
             // Affichez le menu des employés
-            System.out.println("Menu Employés:");
-            System.out.println("1. Ajouter un employé");
-            System.out.println("2. Supprimer un employé");
-            System.out.println("3. Rechercher un employé");
-            System.out.println("4. Mettre à jour un employé");
-            System.out.println("5. Rechercher des employés par attributs");
+            System.out.println("Menu Employées:");
+            System.out.println("1. Ajouter un employée");
+            System.out.println("2. Supprimer un employée");
+            System.out.println("3. Rechercher un employée");
+            System.out.println("4. Mettre à jour un employée");
+            System.out.println("5. Rechercher des employées par attributs");
+            System.out.println("5. Chnager agence de l'employee");
             System.out.println("0. Retour au menu principal");
             System.out.print("Votre choix : ");
 
@@ -27,19 +28,22 @@ public class GlobalVUE {
 
             switch (choice) {
                 case 1:
-                    employeeService.addEmployee();
+                    employeeVue.addEmployee();
                     break;
                 case 2:
-                    employeeService.deleteEmployee();
+                    employeeVue.deleteEmployee();
                     break;
 //                case 3:
 //                    employeeService.findEmployee();
 //                    break;
                 case 4:
-                    employeeService.updateEmployee();
+                    employeeVue.updateEmployee();
                     break;
                 case 5:
-                    employeeService.findEmployeeByAttribute();
+                    employeeVue.findEmployeeByAttribute();
+                    break;
+                case 6:
+                    employeeVue.changeEmployeeAgence();
                     break;
                 case 0:
                     System.out.println("Retour au menu principal.");

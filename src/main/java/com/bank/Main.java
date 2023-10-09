@@ -16,8 +16,16 @@ public class Main {
         AgencyService agencyService = new AgencyService(agencyDAO, agencyEmployee);
         AccountService accountService = new AccountService();
         AccountDAOImpl accountDao = new AccountDAOImpl();
-        EmployeeService employeeService = new EmployeeService();
         EmployeeDAOImpl employeeDao = new EmployeeDAOImpl();
+        EmployeeService employeeService = new EmployeeService(
+                employeeDao
+        );
+        EmployeeVUE employeeVue = new EmployeeVUE(
+                employeeService,
+                scanner,
+                agencyDAO,
+                employeeDao
+        );
         ClientService clientService = new ClientService();
         ClientVUE clientVue = new ClientVUE();
         AccountVUE accountVue = new AccountVUE(
@@ -79,19 +87,15 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    // Menu pour gérer les employés
-                    GlobalVUE.handleEmployeeMenu(employeeService);
+                    GlobalVUE.handleEmployeeMenu(employeeVue);
                     break;
                 case 2:
-                    // Menu pour gérer les clients
                     GlobalVUE.handleClientMenu(clientVue);
                     break;
                 case 3:
-                    // Menu pour gérer les comptes
                     GlobalVUE.handleAccountMenu(accountVue);
                     break;
                 case 4:
-                    // Menu pour gérer les comptes
                     GlobalVUE.handleOperationMenu(operationVue);
                     break;
                 case 5:
